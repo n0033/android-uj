@@ -1,4 +1,4 @@
 version: "0.1"
 services:
-  frontend:
+  helloWorld:
     image: n033/uj-android-zad-01:1.0
