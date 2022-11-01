@@ -10,7 +10,7 @@ You can find the docker image [here](https://hub.docker.com/repository/docker/n0
   
 ## Running with image pulling
 1. `docker pull n033/uj-android-zad-02:1.1`
-2. `docker run "n033/uj-android-zad-02:1.1`
+2. `docker run "n033/uj-android-zad-02:1.1"`
 
 ## Running with docker compose (with ngrok)
 In the directory where `compose.yaml` file is located, run:
