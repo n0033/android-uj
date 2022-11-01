@@ -14,24 +14,24 @@ fun Route.products(){
 
     val productService = ProductService()
 
-    get("product") {
+    get("") {
         val products = productService.getAll()
         call.respond(products)
     }
 
-    get("product/{id}") {
+    get("/{id}") {
         val productId = call.parameters["id"]?.toIntOrNull() ?: throw NotFoundException()
         val productEntity = productService.get(productId) ?: throw NotFoundException()
         call.respond(productEntity.toProduct())
     }
 
-    post("product") {
+    post("") {
         val productInRequest = call.receive<Product>()
         val productEntity = productService.create(productInRequest)
         call.respond(productEntity.toProduct())
     }
 
-    put("product/{id}") {
+    put("/{id}") {
         val productId = call.parameters["id"]?.toIntOrNull() ?: throw NotFoundException()
         val updateData = call.receive<Product>()
         val productEntity = productService.update(productId, updateData) ?: throw NotFoundException()
@@ -39,7 +39,7 @@ fun Route.products(){
 
     }
 
-    delete("product/{id}") {
+    delete("/{id}") {
         val productId = call.parameters["id"]?.toIntOrNull() ?: throw NotFoundException()
         productService.delete(productId) ?: throw NotFoundException()
         call.response.status(HttpStatusCode.NoContent)

@@ -13,24 +13,24 @@ import pl.edu.uj.android.services.CategoryService
 fun Route.categories(){
     val categoryService = CategoryService()
 
-    get("category") {
+    get("") {
         val products = categoryService.getAll()
         call.respond(products)
     }
 
-    get("category/{id}") {
+    get("/{id}") {
         val categoryId = call.parameters["id"]?.toIntOrNull() ?: throw NotFoundException()
         val categoryEntity = categoryService.get(categoryId) ?: throw NotFoundException()
         call.respond(categoryEntity.toCategory())
     }
 
-    post("category") {
+    post("") {
         val categoryInRequest = call.receive<Category>()
         val categoryEntity = categoryService.create(categoryInRequest)
         call.respond(categoryEntity.toCategory())
     }
 
-    put("category/{id}") {
+    put("/{id}") {
         val categoryId = call.parameters["id"]?.toIntOrNull() ?: throw NotFoundException()
         val updateData = call.receive<Category>()
         val categoryEntity = categoryService.update(categoryId, updateData) ?: throw NotFoundException()
@@ -38,7 +38,7 @@ fun Route.categories(){
 
     }
 
-    delete("category/{id}") {
+    delete("/{id}") {
         val categoryId = call.parameters["id"]?.toIntOrNull() ?: throw NotFoundException()
         categoryService.delete(categoryId) ?: throw NotFoundException()
         call.response.status(HttpStatusCode.NoContent)

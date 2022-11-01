@@ -18,13 +18,15 @@ fun Application.module(testing: Boolean = false) {
     install(ContentNegotiation) {
         gson {
         }
+
     }
+
     initDB()
 
 
     routing {
 
-        apiRoute()
+        v1Route()
 
         get("/") {
             call.respond(mapOf("content" to "Hello World!"))
