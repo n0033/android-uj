@@ -5,8 +5,8 @@
 You can find the docker image [here](https://hub.docker.com/repository/docker/n033/uj-android-zad-02).
 
 ## Running using dockerfile (without ngrok), in `zadanie-02` directory:
-1. `docker build -t "zad-01" .`
-2. `docker run "zad-01"
+1. `docker build -t "zad-02" .`
+2. `docker run "zad-02"
   
 ## Running with image pulling
 1. `docker pull n033/uj-android-zad-02:1.1`
