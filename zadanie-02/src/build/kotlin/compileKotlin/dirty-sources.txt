@@ -1,0 +1,3 @@
+/Users/norbertwyszkowski/IdeaProjects/android23/zad2/src/Application.kt
+/Users/norbertwyszkowski/IdeaProjects/android23/zad2/src/models/Products.kt
+/Users/norbertwyszkowski/IdeaProjects/android23/zad2/src/controllers/products.kt

@@ -1,0 +1,13 @@
+version: "0.1"
+services:
+  app:
+    image: "n033/uj-android-zad-02:1.0"
+    ports:
+      - 8080:8080
+  ngrok:
+    image: "ngrok/ngrok:latest"
+    command: "http app:8080"
+    ports:
+      - 4040:4040
+    expose:
+      - 4040
