@@ -1,2 +1,2 @@
 # Task no. 3
-### Contains all requirements in the task
+The project contains all requirements of the task.
