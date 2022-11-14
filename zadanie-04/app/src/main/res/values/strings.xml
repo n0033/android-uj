@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">zadanie-04</string>
+    <string name="title">TODO List</string>
+    <string name="add_task">Add</string>
+    <string name="delete_task">Delete</string>
+    <string name="edit_text_placeholder">Add a task</string>
+</resources>
