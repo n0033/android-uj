@@ -37,9 +37,16 @@ class DBHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
         values.put(DUE_DATE_COL, task.dueDate.format(DateTimeFormatter.ISO_DATE_TIME))
         values.put(STATUS_COL, task.status.toString())
         val db = this.writableDatabase
-        db.insert(TABLE_NAME, null, values)
+        val id = db.insert(TABLE_NAME, null, values)
         db.close()
+        task.id = id.toInt()
         return task
+    }
+
+    fun deleteTaskById(id: Int){
+        val db = this.readableDatabase
+        db.delete(TABLE_NAME, "id=?", arrayOf(id.toString()));
+        db.close();
     }
 
     @SuppressLint("Range")

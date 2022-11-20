@@ -13,7 +13,7 @@ enum class TaskStatusEnum {
 }
 
 data class Task(
-    val id: Int?,
+    var id: Int?,
     val name: String,
     val description: String = "",
     val dueDate: LocalDateTime = LocalDateTime.now(),
