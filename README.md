@@ -1,8 +1,10 @@
 # Jagiellonian University Android course repository
 Repository contains tasks categorised in directories.
   Specific tasks details are described in `README.md` placed in corresponding directory.
-
+  
+  
 **Zad 1 Docker**
+
 
 3.0 obraz ubuntu z Pythonem w wersji 3.8
 
@@ -85,11 +87,11 @@ Termin: **1.12**
 
 4.0 modele Produktów oraz Kategorii (z relacją)
 
-4.5 utworzyć relacje pomiędzy modelami
+4.5 model Użytkownika
 
 5.0 modele w Realmie lub Firebase
 
-Termin: **8.12**
+Termin: **11.12**
 
 
 **Zad 7 Sieć**
@@ -134,7 +136,7 @@ Termin: **31.12**
 
 5.0 dodanie opcji przez PayU
 
-Termin: **31.12** 
+Termin: **06.01** 
 
 
 **Zad 10 Testy**
