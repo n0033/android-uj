@@ -44,5 +44,35 @@ class CartUtils {
                 }
 
         }
+
+
+        fun removeFromCart(product: Product, cartId: String = "test"){
+            RealtimeDatabase<Cart>()
+                .read("${COLLECTION["cart"]}/$cartId/items")
+                .get()
+                .addOnSuccessListener {
+                    val cart = mutableListOf<CartItem>()
+
+                    var item: CartItem? = null;
+                    for (cartItemSnapshot in it.children) {
+                        item = cartItemSnapshot.getValue<CartItem>()
+                        cart.add(item!!)
+                        if (item.productId == product.uid) {
+                            item.quantity = item.quantity!! - 1;
+                        }
+                        if (item.quantity!! <= 0) {
+                            cart.remove(item);
+                        }
+                    }
+
+                    val updateData = hashMapOf<String, Any>(
+                        "${COLLECTION["cart"]}/$cartId/items" to cart
+                    )
+                    Constants.DB.updateChildren(updateData);
+
+                }.addOnFailureListener{
+                    println("remove from cart failure") // TODO!
+                }
+        }
     }
 }

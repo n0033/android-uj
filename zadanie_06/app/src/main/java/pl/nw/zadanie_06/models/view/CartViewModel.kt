@@ -54,10 +54,9 @@ class CartViewModel : ViewModel() {
                 for (productSnapshot in dataSnapshot.children) {
                     tempProduct = productSnapshot.getValue<Product>()
                     if (tempProduct == null) continue;
-                    if (cartItems.contains(tempProduct.uid)) {
-                        cartProducts.add(tempProduct)
-                    }
+                    cartProducts.add(tempProduct)
                }
+                _uiState.update{currentState -> currentState.copy(products = cartProducts)}
             }
 
             override fun onCancelled(error: DatabaseError) {

@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import kotlinx.coroutines.launch
 import pl.nw.zadanie_06.R
 import pl.nw.zadanie_06.databinding.ProductDetailsBinding
@@ -44,6 +45,10 @@ class ProductDetailsFragment : Fragment(R.layout.product_details) {
                     binding.productDetailsCategory.text = value.category?.name;
                 }
             }
+        }
+
+        binding.productDetailsBackButton.setOnClickListener{
+            findNavController().navigate(R.id.action_ProductDetailsFragment_to_PagerFragment)
         }
 
         binding.productDetailsAddToCart.setOnClickListener{
