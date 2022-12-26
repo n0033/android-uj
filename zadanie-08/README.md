@@ -2,7 +2,7 @@
 
 ✅ 3.0 logowanie przez aplikację serwerową
 
-✅ 3.5 rejestracja przez aplikację serwerową (firebase - nalezy wybrac logowanie emailem i wpisac nieuzywany wczesniej mail)
+✅ 3.5 rejestracja przez aplikację serwerową (firebase - nalezy wybrac logowanie emailem i wpisac nieuzywany wczesniej email)
 
 ✅ 4.0 logowanie via Google OAuth2
 
