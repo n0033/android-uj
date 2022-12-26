@@ -1,13 +1,13 @@
-# Task no. 6
+**Zad 8 Logowanie i rejestracja
 
-Zad 6 Baza danych
+✅ 3.0 logowanie przez aplikację serwerową
 
-✅ 3.0 stworzenie modelów Produktów oraz Kategorii
+✅ 3.5 rejestracja przez aplikację serwerową (firebase - nalezy wybrac logowanie emailem i wpisac nieuzywany wczesniej mail)
 
-✅ 3.5 model Koszyka
+✅ 4.0 logowanie via Google OAuth2
 
-✅ 4.0 modele Produktów oraz Kategorii (z relacją)
+✅ 4.5 logowanie via Facebook lub Github OAuth2
 
-✅ 4.5 model Użytkownika
+✅ (out of the box - firebase) 5.0 zapisywanie danych logowania OAuth2 po stronie serwera
 
-✅ 5.0 modele w Realmie lub Firebase
+Termin: **31.12** 
