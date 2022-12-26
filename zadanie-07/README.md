@@ -1,13 +1,13 @@
-# Task no. 6
+**Zad 7 Sieć**
 
-Zad 6 Baza danych
+✅ 3.0 pobieranie produktów z aplikacji serwerowej
 
-✅ 3.0 stworzenie modelów Produktów oraz Kategorii
+✅ 3.5 pobieranie dodatkowo kategorii
 
-✅ 3.5 model Koszyka
+✅ 4.0 wyświetlanie produktów oraz ich kategorii na dwóch osobnych listach
 
-✅ 4.0 modele Produktów oraz Kategorii (z relacją)
+✅ (cart) 4.5 zapis danych lokalnie
 
-✅ 4.5 model Użytkownika
+✅ 5.0 dodawanie produktów z poziomu aplikacji mobilnej
 
-✅ 5.0 modele w Realmie lub Firebase
+Termin: **15.12** 
