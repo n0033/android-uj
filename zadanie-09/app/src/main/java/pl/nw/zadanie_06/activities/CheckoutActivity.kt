@@ -1,9 +1,6 @@
 package pl.nw.zadanie_06.activities
 
-import android.content.Context
 import android.os.Bundle
-import android.util.AttributeSet
-import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
@@ -18,7 +15,6 @@ import pl.nw.zadanie_06.models.data.Payment
 import pl.nw.zadanie_06.models.view.CheckoutViewModel
 import pl.nw.zadanie_06.utils.UserUtils
 import java.time.LocalDateTime
-import java.util.*
 
 class CheckoutActivity : AppCompatActivity() {
 

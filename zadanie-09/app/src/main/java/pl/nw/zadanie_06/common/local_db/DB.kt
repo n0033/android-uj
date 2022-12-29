@@ -7,11 +7,9 @@ import androidx.room.RoomDatabase
 import pl.nw.zadanie_06.models.data.Cart
 import pl.nw.zadanie_06.models.data.User
 import pl.nw.zadanie_06.Constants
-import pl.nw.zadanie_06.models.data.Address
-import pl.nw.zadanie_06.models.data.Payment
 
 
-@Database(entities = [Address::class, Cart::class, Payment::class, User::class], version = 1)
+@Database(entities = [Cart::class, User::class], version = 1)
 abstract class LocalDatabase : RoomDatabase() {
     abstract fun cartDao(): CartDao
     abstract fun userDao(): UserDao
