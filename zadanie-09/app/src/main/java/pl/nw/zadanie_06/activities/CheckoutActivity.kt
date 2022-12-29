@@ -53,10 +53,10 @@ class CheckoutActivity : AppCompatActivity() {
 
         binding.checkoutButton.setOnClickListener {
             val address = Address(
-                binding.checkoutAddress1Input.text.toString(),
-                binding.checkoutAddress2Input.text.toString(),
-                binding.checkoutPostCodeInput.text.toString(),
-                binding.checkoutCityInput.text.toString()
+                line1 = binding.checkoutAddress1Input.text.toString(),
+                line2 = binding.checkoutAddress2Input.text.toString(),
+                postCode = binding.checkoutPostCodeInput.text.toString(),
+                city = binding.checkoutCityInput.text.toString()
             )
             val payment = Payment(
                 userId = user!!.uid,
