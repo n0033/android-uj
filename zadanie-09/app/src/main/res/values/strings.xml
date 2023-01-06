@@ -14,9 +14,12 @@
     <string name="city">City</string>
     <string name="description">Description</string>
     <string name="minus">-</string>
+    <string name="my_account">My account</string>
     <string name="name">Name</string>
     <string name="next">Next</string>
+    <string name="orders">Orders</string>
     <string name="pager_label">Pager fragment</string>
+    <string name="paid_products">Paid products</string>
     <string name="post_code">Post code</string>
     <string name="plus">+</string>
     <string name="previous">Previous</string>
@@ -24,4 +27,5 @@
     <string name="product_details_label">Product detailed view</string>
     <string name="product_list_label">Product list</string>
     <string name="product_list_title">Shop</string>
+    <string name="x">X</string>
 </resources>

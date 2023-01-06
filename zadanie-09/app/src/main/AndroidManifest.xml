@@ -32,7 +32,12 @@
             android:name=".activities.CheckoutActivity"
             android:exported="true"
             android:theme="@style/Theme.Zadanie_06.NoActionBar">
+        </activity>
 
+        <activity
+            android:name=".activities.OrderListActivity"
+            android:exported="true"
+            android:theme="@style/Theme.Zadanie_06.NoActionBar">
         </activity>
 
     </application>

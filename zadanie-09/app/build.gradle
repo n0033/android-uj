@@ -57,6 +57,13 @@ dependencies {
     implementation "com.google.firebase:firebase-database-ktx"
     implementation 'com.firebaseui:firebase-ui-auth:8.0.2'
 
+    //fuel
+    implementation 'com.github.kittinunf.fuel:fuel:2.3.1'
+    implementation 'com.github.kittinunf.fuel:fuel-android:2.3.1'
+    implementation "com.github.kittinunf.fuel:fuel-coroutines:2.3.1"
+    implementation 'com.github.kittinunf.fuel:fuel-gson:2.3.1'
+
+
     // gson
     implementation "com.google.code.gson:gson:$gson_version"
 

@@ -14,7 +14,7 @@ import pl.nw.zadanie_06.adapters.PagerAdapter
 class PagerFragment : Fragment() {
     private lateinit var pagerAdapter: PagerAdapter
     private lateinit var viewPager: ViewPager2
-    private var tabTitles = arrayOf("Shop", "Cart", "Category", "Add product")
+    private var tabTitles = arrayOf("Shop", "Cart", "Category", "Add product", "My account")
 
     override fun onCreateView(
         inflater: LayoutInflater,

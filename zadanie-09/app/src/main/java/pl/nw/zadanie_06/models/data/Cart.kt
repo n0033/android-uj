@@ -11,7 +11,7 @@ data class CartItem (
 )
 
 data class CartItemList (
-    val cartItemList: ArrayList<CartItem>
+    var cartItemList: ArrayList<CartItem>
 )
 
 @Entity

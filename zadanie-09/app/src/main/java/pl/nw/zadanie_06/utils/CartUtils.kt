@@ -27,7 +27,7 @@ class CartUtils {
             }
             val existingProducts = cart.items.cartItemList.filter { it.productId == product.uid }
             if (existingProducts.isEmpty()) {
-               val item = CartItem(1, product.uid)
+                val item = CartItem(1, product.uid)
                 cart.items.cartItemList.add(item)
             }
 
@@ -39,7 +39,7 @@ class CartUtils {
         }
 
 
-        suspend fun removeFromCart(db: LocalDatabase, product: Product, userId: String){
+        suspend fun removeFromCart(db: LocalDatabase, product: Product, userId: String) {
             var cart = db.cartDao().findCartByUserId(userId)
             if (cart == null) {
                 cart = createEmptyCart(db, userId)
@@ -54,10 +54,21 @@ class CartUtils {
             item.quantity -= 1
 
             if (item.quantity <= 0) {
-               cart.items.cartItemList.remove(item)
+                cart.items.cartItemList.remove(item)
             }
             db.cartDao().update(cart)
+        }
 
+
+        suspend fun flushCart(db: LocalDatabase, userId: String) {
+            var cart = db.cartDao().findCartByUserId(userId)
+            if (cart == null) {
+                createEmptyCart(db, userId)
+                return
+            }
+            cart.items.cartItemList = arrayListOf()
+
+            db.cartDao().update(cart)
         }
     }
 }
