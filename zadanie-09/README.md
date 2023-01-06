@@ -6,7 +6,7 @@
 
 ✅ 4.0 lista zakupionych (opłaconych) produktów + model
 
-4.5 wdrożenie stripe'a
+✅ 4.5 wdrożenie stripe'a
 
 5.0 dodanie opcji przez PayU
 
