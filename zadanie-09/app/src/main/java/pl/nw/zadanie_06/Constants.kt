@@ -10,9 +10,12 @@ object Constants {
 
     val STRIPE_PUBLISHABLE_KEY = System.getenv("STRIPE_PUBLISHABLE_KEY")
         ?: "pk_test_51MKLi0AmUR8Uxul1QpPrt8w0e6WqVOoMDB4e61jz3AVERIXeWLIKQOWs4FD71bwnvGqxR1UNUq2bEC1lCmX70F1A00Td2dsTVX"
-    val STRIPE_SECRET_KEY = System.getenv("STRIPE_SECRET_KEY") ?: "sk_test_51MKLi0AmUR8Uxul17nxySwrxcbbeMkRgF1dtsjgiL7r2nBXVSZWCcIsWaPzYBiCSqfE3OOvvIHWfuexmGwxrFUa600sBEIU2s4"
+    val STRIPE_SECRET_KEY = System.getenv("STRIPE_SECRET_KEY")
+        ?: "sk_test_51MKLi0AmUR8Uxul17nxySwrxcbbeMkRgF1dtsjgiL7r2nBXVSZWCcIsWaPzYBiCSqfE3OOvvIHWfuexmGwxrFUa600sBEIU2s4"
     val STRIPE_CREATE_CUSTOMER_URL =
         System.getenv("STRIPE_CREATE_CUSTOMER_URL") ?: "https://api.stripe.com/v1/customers"
+    val STRIPE_PAYMENT_INTENT_URL =
+        System.getenv("STRIPE_PAYMENT_INTENT_URL") ?: "https://api.stripe.com/v1/payment_intents"
 
     val COLLECTION = mapOf(
         "cart" to "carts",

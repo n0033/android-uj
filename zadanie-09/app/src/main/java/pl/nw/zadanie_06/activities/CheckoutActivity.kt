@@ -5,10 +5,16 @@ import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
+import com.github.kittinunf.fuel.core.extensions.authentication
+import com.github.kittinunf.fuel.gson.responseObject
+import com.github.kittinunf.fuel.httpPost
 import com.google.firebase.auth.FirebaseAuth
+import com.stripe.android.PaymentConfiguration
 import com.stripe.android.paymentsheet.PaymentSheet
 import com.stripe.android.paymentsheet.PaymentSheetResult
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
+import pl.nw.zadanie_06.Constants
 import pl.nw.zadanie_06.MainActivity
 import pl.nw.zadanie_06.common.local_db.LocalDatabase
 import pl.nw.zadanie_06.databinding.ActivityCheckoutBinding
@@ -16,6 +22,7 @@ import pl.nw.zadanie_06.models.data.Address
 import pl.nw.zadanie_06.models.data.Payment
 import pl.nw.zadanie_06.models.view.CheckoutViewModel
 import pl.nw.zadanie_06.utils.CartUtils
+import pl.nw.zadanie_06.utils.StripeUtils
 import pl.nw.zadanie_06.utils.UserUtils
 import java.time.LocalDateTime
 
@@ -30,6 +37,9 @@ class CheckoutActivity : AppCompatActivity() {
         UserUtils.ensureAuth(this)
         CheckoutViewModel.Factory(db, user!!.uid)
     }
+    private lateinit var payment: Payment
+    lateinit var paymentIntentClientSecret: String
+    lateinit var customerConfig: PaymentSheet.CustomerConfiguration
     lateinit var paymentSheet: PaymentSheet
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -59,24 +69,63 @@ class CheckoutActivity : AppCompatActivity() {
             )
             lifecycleScope.launch {
                 val cartItems = db.cartDao().findCartByUserId(user!!.uid)!!.items
-                val payment = Payment(
+                payment = Payment(
                     userId = user.uid,
                     timestamp = LocalDateTime.now(),
                     amount = (price * 100).toInt(),
                     items = cartItems,
                     address = address
                 )
-                db.paymentDao().insert(payment)
-                CartUtils.flushCart(db, user.uid)
-                val intent = Intent(applicationContext, MainActivity::class.java)
-                startActivity(intent)
+
+                StripeUtils.ensureCustomerExists(db, user.uid)
+                val stripeCustomer = db.stripeCustomerDao().findByUserId(user.uid)
+                Constants.STRIPE_PAYMENT_INTENT_URL.httpPost(
+                    listOf(
+                        "customer" to stripeCustomer!!.stripeCustomerId,
+                        "amount" to payment.amount,
+                        "currency" to "usd",
+                        "automatic_payment_methods[enabled]" to true
+                    )
+                ).authentication().basic(Constants.STRIPE_SECRET_KEY, "")
+                    .responseObject<StripeUtils.StripePaymentIntent> { _, _, result ->
+                        val (body, _) = result
+                        paymentIntentClientSecret = body!!.client_secret
+                        PaymentConfiguration.init(applicationContext, Constants.STRIPE_PUBLISHABLE_KEY)
+                        presentPaymentSheet()
+                    }
             }
 
         }
     }
 
-    fun onPaymentSheetResult(paymentSheetResult: PaymentSheetResult) {
-        // implemented in the next steps
+    private fun presentPaymentSheet() {
+        println("paymentinent: $paymentIntentClientSecret")
+        paymentSheet.presentWithPaymentIntent(
+            paymentIntentClientSecret, PaymentSheet.Configuration(
+                merchantDisplayName = "Norbert shop", allowsDelayedPaymentMethods = true
+            )
+        )
+    }
+
+    private fun onPaymentSheetResult(paymentSheetResult: PaymentSheetResult) {
+        println("callowana jest ta funkcja")
+        println(paymentSheetResult)
+        when (paymentSheetResult) {
+            is PaymentSheetResult.Canceled -> {
+                print("Canceled")
+            }
+            is PaymentSheetResult.Failed -> {
+                print("Error: ${paymentSheetResult.error}")
+            }
+            is PaymentSheetResult.Completed -> {
+                runBlocking {
+                    db.paymentDao().insert(payment)
+                    CartUtils.flushCart(db, user!!.uid)
+                }
+                val intent = Intent(this, MainActivity::class.java)
+                startActivity(intent)
+            }
+        }
     }
 
 }

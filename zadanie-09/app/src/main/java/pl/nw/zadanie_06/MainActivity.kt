@@ -14,10 +14,8 @@ import com.firebase.ui.auth.FirebaseAuthUIActivityResultContract
 import com.firebase.ui.auth.data.model.FirebaseAuthUIAuthenticationResult
 import com.google.firebase.auth.FirebaseAuth
 import com.stripe.android.PaymentConfiguration
-import kotlinx.coroutines.runBlocking
 import pl.nw.zadanie_06.common.local_db.LocalDatabase
 import pl.nw.zadanie_06.databinding.ActivityMainBinding
-import pl.nw.zadanie_06.utils.StripeCustomerUtils
 
 
 class MainActivity : AppCompatActivity() {
@@ -61,9 +59,6 @@ class MainActivity : AppCompatActivity() {
             signInLauncher.launch(createSignInIntent())
         }
 
-        runBlocking {
-            StripeCustomerUtils.ensureCustomerExists(db, auth.currentUser!!.uid)
-        }
 
         val navController = findNavController(R.id.nav_host_fragment_content_main)
         appBarConfiguration = AppBarConfiguration(navController.graph)

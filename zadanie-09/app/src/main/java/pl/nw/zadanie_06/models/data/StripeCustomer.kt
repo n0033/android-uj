@@ -11,5 +11,5 @@ import pl.nw.zadanie_06.utils.Converters
 data class StripeCustomer(
     @PrimaryKey(autoGenerate = true) val uid: Int = 0,
     var userId: String,
-    var stripCustomerId: String
+    var stripeCustomerId: String
 )
