@@ -1,13 +1,13 @@
-**Zad 8 Logowanie i rejestracja
+**Zad 9 Płatności**
 
-✅ 3.0 logowanie przez aplikację serwerową
+✅ 3.0 formularz płatności oraz mockowanie przez aplikację serwerową
 
-✅ 3.5 rejestracja przez aplikację serwerową (firebase - nalezy wybrac logowanie emailem i wpisac nieuzywany wczesniej email)
+✅ 3.5 model płatności lokalnie
 
-✅ 4.0 logowanie via Google OAuth2
+✅ 4.0 lista zakupionych (opłaconych) produktów + model
 
-✅ 4.5 logowanie via Facebook lub Github OAuth2
+4.5 wdrożenie stripe'a
 
-✅ (out of the box - firebase) 5.0 zapisywanie danych logowania OAuth2 po stronie serwera
+5.0 dodanie opcji przez PayU
 
-Termin: **31.12** 
+Termin: **06.01** 
