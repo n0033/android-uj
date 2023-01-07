@@ -16,23 +16,26 @@ class StripeUtils {
     )
 
     companion object {
+
         suspend fun ensureCustomerExists(db: LocalDatabase, userId: String) {
             val stripeCustomer = db.stripeCustomerDao().findByUserId(userId)
+
             if (stripeCustomer == null) {
                 Constants.STRIPE_CREATE_CUSTOMER_URL.httpPost().authentication()
                     .basic(Constants.STRIPE_SECRET_KEY, "")
                     .responseObject<StripeCustomerId> { _, _, result ->
                         val (body, _) = result
+                        val newCustomer =
+                            StripeCustomer(userId = userId, stripeCustomerId = body!!.id)
                         runBlocking {
-                            db.stripeCustomerDao().insert(
-                                StripeCustomer(
-                                    userId = userId, stripeCustomerId = body!!.id
-                                )
-                            )
+                            db.stripeCustomerDao().insert(newCustomer)
                         }
+
                     }
             }
+
         }
 
     }
+
 }

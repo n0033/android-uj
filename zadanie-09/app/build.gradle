@@ -70,6 +70,9 @@ dependencies {
     // junit
     implementation "junit:junit:$junit_version"
 
+    //payU
+    implementation 'in.payu:payu-checkout-pro:1.8.2'
+
     // room
     implementation("androidx.room:room-runtime:$room_version")
     annotationProcessor("androidx.room:room-compiler:$room_version")

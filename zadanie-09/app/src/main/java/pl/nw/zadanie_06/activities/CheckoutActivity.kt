@@ -67,7 +67,7 @@ class CheckoutActivity : AppCompatActivity() {
                 postCode = binding.checkoutPostCodeInput.text.toString(),
                 city = binding.checkoutCityInput.text.toString()
             )
-            lifecycleScope.launch {
+            runBlocking {
                 val cartItems = db.cartDao().findCartByUserId(user!!.uid)!!.items
                 payment = Payment(
                     userId = user.uid,
@@ -76,12 +76,10 @@ class CheckoutActivity : AppCompatActivity() {
                     items = cartItems,
                     address = address
                 )
-
-                StripeUtils.ensureCustomerExists(db, user.uid)
-                val stripeCustomer = db.stripeCustomerDao().findByUserId(user.uid)
+                val stripeCustomer = db.stripeCustomerDao().findByUserId(user.uid)!!
                 Constants.STRIPE_PAYMENT_INTENT_URL.httpPost(
                     listOf(
-                        "customer" to stripeCustomer!!.stripeCustomerId,
+                        "customer" to stripeCustomer.stripeCustomerId,
                         "amount" to payment.amount,
                         "currency" to "usd",
                         "automatic_payment_methods[enabled]" to true
@@ -90,7 +88,9 @@ class CheckoutActivity : AppCompatActivity() {
                     .responseObject<StripeUtils.StripePaymentIntent> { _, _, result ->
                         val (body, _) = result
                         paymentIntentClientSecret = body!!.client_secret
-                        PaymentConfiguration.init(applicationContext, Constants.STRIPE_PUBLISHABLE_KEY)
+                        PaymentConfiguration.init(
+                            applicationContext, Constants.STRIPE_PUBLISHABLE_KEY
+                        )
                         presentPaymentSheet()
                     }
             }
@@ -108,7 +108,6 @@ class CheckoutActivity : AppCompatActivity() {
     }
 
     private fun onPaymentSheetResult(paymentSheetResult: PaymentSheetResult) {
-        println("callowana jest ta funkcja")
         println(paymentSheetResult)
         when (paymentSheetResult) {
             is PaymentSheetResult.Canceled -> {
