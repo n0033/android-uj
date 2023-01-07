@@ -116,15 +116,23 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:padding="10dp"
-        android:orientation="vertical"
+        android:orientation="horizontal"
         app:layout_constraintTop_toBottomOf="@id/checkout_city">
 
         <Button
-            android:id="@+id/checkout_button"
+            android:id="@+id/pay_with_stripe_button"
             android:layout_width="125dp"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
-            android:text="@string/checkout"
+            android:text="@string/pay_with_stripe"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <Button
+            android:id="@+id/pay_with_payu_button"
+            android:layout_width="125dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:text="@string/pay_with_payu"
             app:layout_constraintStart_toStartOf="parent" />
     </LinearLayout>
 

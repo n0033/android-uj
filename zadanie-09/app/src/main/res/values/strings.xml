@@ -20,6 +20,8 @@
     <string name="orders">Orders</string>
     <string name="pager_label">Pager fragment</string>
     <string name="paid_products">Paid products</string>
+    <string name="pay_with_stripe">Pay with Stripe</string>
+    <string name="pay_with_payu">Pay with PayU</string>
     <string name="post_code">Post code</string>
     <string name="plus">+</string>
     <string name="previous">Previous</string>

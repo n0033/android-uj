@@ -2,6 +2,8 @@ package pl.nw.zadanie_06.activities
 
 import android.content.Intent
 import android.os.Bundle
+import android.text.TextUtils
+import android.webkit.WebView
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
@@ -9,6 +11,14 @@ import com.github.kittinunf.fuel.core.extensions.authentication
 import com.github.kittinunf.fuel.gson.responseObject
 import com.github.kittinunf.fuel.httpPost
 import com.google.firebase.auth.FirebaseAuth
+import com.payu.base.models.ErrorResponse
+import com.payu.base.models.PayUPaymentParams
+import com.payu.checkoutpro.PayUCheckoutPro
+import com.payu.checkoutpro.utils.PayUCheckoutProConstants
+import com.payu.checkoutpro.utils.PayUCheckoutProConstants.CP_HASH_NAME
+import com.payu.checkoutpro.utils.PayUCheckoutProConstants.CP_HASH_STRING
+import com.payu.ui.model.listeners.PayUCheckoutProListener
+import com.payu.ui.model.listeners.PayUHashGenerationListener
 import com.stripe.android.PaymentConfiguration
 import com.stripe.android.paymentsheet.PaymentSheet
 import com.stripe.android.paymentsheet.PaymentSheetResult
@@ -24,7 +34,10 @@ import pl.nw.zadanie_06.models.view.CheckoutViewModel
 import pl.nw.zadanie_06.utils.CartUtils
 import pl.nw.zadanie_06.utils.StripeUtils
 import pl.nw.zadanie_06.utils.UserUtils
+import java.math.BigInteger
+import java.security.MessageDigest
 import java.time.LocalDateTime
+import java.util.*
 
 class CheckoutActivity : AppCompatActivity() {
 
@@ -60,7 +73,7 @@ class CheckoutActivity : AppCompatActivity() {
             }
         }
 
-        binding.checkoutButton.setOnClickListener {
+        binding.payWithStripeButton.setOnClickListener {
             val address = Address(
                 line1 = binding.checkoutAddress1Input.text.toString(),
                 line2 = binding.checkoutAddress2Input.text.toString(),
@@ -95,6 +108,105 @@ class CheckoutActivity : AppCompatActivity() {
                     }
             }
 
+        }
+
+        binding.payWithPayuButton.setOnClickListener {
+            val address = Address(
+                line1 = binding.checkoutAddress1Input.text.toString(),
+                line2 = binding.checkoutAddress2Input.text.toString(),
+                postCode = binding.checkoutPostCodeInput.text.toString(),
+                city = binding.checkoutCityInput.text.toString()
+            )
+            runBlocking {
+                val cartItems = db.cartDao().findCartByUserId(user!!.uid)!!.items
+                payment = Payment(
+                    userId = user.uid,
+                    timestamp = LocalDateTime.now(),
+                    amount = (price * 100).toInt(),
+                    items = cartItems,
+                    address = address
+                )
+                val payUPaymentParams = PayUPaymentParams.Builder()
+                    .setAmount(price.toString())
+                    .setIsProduction(false)
+                    .setKey(Constants.PAYU_KEY)
+                    .setProductInfo("Norb shop order")
+                    .setTransactionId(UUID.randomUUID().toString())
+                    .setFirstName(user.displayName)
+                    .setEmail(user.email)
+                    .setSurl(Constants.PAYU_SUCCESS_URL)
+                    .setFurl(Constants.PAYU_FAILURE_URL)
+                    .setPhone("8160651749")
+                    .build()
+                println(Constants.PAYU_SUCCESS_URL)
+
+                PayUCheckoutPro.open(
+                    this@CheckoutActivity, payUPaymentParams, object : PayUCheckoutProListener {
+
+                        override fun onPaymentSuccess(response: Any) {
+                            response as HashMap<*, *>
+                            val payUResponse = response[PayUCheckoutProConstants.CP_PAYU_RESPONSE]
+                            val merchantResponse = response[PayUCheckoutProConstants.CP_MERCHANT_RESPONSE]
+                            runBlocking {
+                                db.paymentDao().insert(payment)
+                                CartUtils.flushCart(db, user.uid)
+                            }
+                            val intent = Intent(this@CheckoutActivity, MainActivity::class.java)
+                            startActivity(intent)
+                        }
+
+
+                        override fun onPaymentFailure(response: Any) {
+                            response as HashMap<*, *>
+                            println("payment failure")
+                            val payUResponse = response[PayUCheckoutProConstants.CP_PAYU_RESPONSE]
+                            val merchantResponse = response[PayUCheckoutProConstants.CP_MERCHANT_RESPONSE]
+                        }
+
+
+                        override fun onPaymentCancel(isTxnInitiated:Boolean) {
+                        }
+
+
+                        override fun onError(errorResponse: ErrorResponse) {
+                            println("error")
+                            println(errorResponse.errorMessage)
+                            println(errorResponse.errorCode)
+                        }
+
+                        override fun setWebViewProperties(webView: WebView?, bank: Any?) {
+                        }
+
+                        override fun generateHash(
+                            valueMap: HashMap<String, String?>,
+                            hashGenerationListener: PayUHashGenerationListener
+                        ) {
+                            if ( valueMap.containsKey(CP_HASH_STRING)
+                                && valueMap.containsKey(CP_HASH_STRING) != null
+                                && valueMap.containsKey(CP_HASH_NAME)
+                                && valueMap.containsKey(CP_HASH_NAME) != null) {
+
+                                val hashData = valueMap[CP_HASH_STRING]
+                                val hashName = valueMap[CP_HASH_NAME]
+                                val md = MessageDigest.getInstance("SHA-512")
+                                println("hashdata: $hashData")
+                                val messageDigest = md.digest("$hashData${Constants.PAYU_SALT}".toByteArray())
+                                val no = BigInteger(1, messageDigest)
+                                var hashtext = no.toString(16)
+                                while (hashtext.length < 32) {
+                                    hashtext = "0$hashtext"
+                                }
+                                val hash: String = hashtext
+                                println("hash: $hash")
+                                if (!TextUtils.isEmpty(hash)) {
+                                    val dataMap: HashMap<String, String?> = HashMap()
+                                    dataMap[hashName!!] = hash
+                                    hashGenerationListener.onHashGenerated(dataMap)
+                                }
+                            }
+                        }
+                    })
+            }
         }
     }
 
