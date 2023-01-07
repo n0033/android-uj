@@ -8,6 +8,6 @@
 
 ✅ 4.5 wdrożenie stripe'a
 
-5.0 dodanie opcji przez PayU
+✅ 5.0 dodanie opcji przez PayU
 
 Termin: **06.01** 
