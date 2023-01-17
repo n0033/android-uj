@@ -61,11 +61,11 @@ class MainActivity : AppCompatActivity() {
             signInLauncher.launch(createSignInIntent())
         }
 
-        runBlocking {
-            StripeUtils.ensureCustomerExists(db, auth.currentUser!!.uid)
+        if (auth.currentUser != null) {
+            runBlocking {
+                StripeUtils.ensureCustomerExists(db, auth.currentUser!!.uid)
+            }
         }
-
-
 
         val navController = findNavController(R.id.nav_host_fragment_content_main)
         appBarConfiguration = AppBarConfiguration(navController.graph)
@@ -99,6 +99,11 @@ class MainActivity : AppCompatActivity() {
         if (result.resultCode != RESULT_OK) {
             val intent = Intent()
             startActivity(intent)
+        }
+        if (auth.currentUser != null) {
+            runBlocking {
+                StripeUtils.ensureCustomerExists(db, auth.currentUser!!.uid)
+            }
         }
     }
 }
