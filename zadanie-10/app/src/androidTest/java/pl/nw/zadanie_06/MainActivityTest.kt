@@ -1,6 +1,5 @@
 package pl.nw.zadanie_06
 
-
 import android.content.Context
 import android.view.View
 import android.view.ViewGroup
@@ -9,21 +8,20 @@ import android.widget.LinearLayout
 import android.widget.RelativeLayout
 import androidx.recyclerview.widget.RecyclerView
 import androidx.test.core.app.ApplicationProvider
-import androidx.test.espresso.Espresso
+import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions
-import androidx.test.espresso.assertion.ViewAssertions
+import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.contrib.RecyclerViewActions
-import androidx.test.espresso.matcher.ViewMatchers
+import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
 import kotlinx.coroutines.runBlocking
-import net.bytebuddy.asm.Advice.Local
 import org.hamcrest.Description
 import org.hamcrest.Matcher
 import org.hamcrest.Matchers
+import org.hamcrest.Matchers.allOf
 import org.hamcrest.TypeSafeMatcher
 import org.hamcrest.core.IsInstanceOf
 import org.junit.After
@@ -32,7 +30,6 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import pl.nw.zadanie_06.common.local_db.LocalDatabase
-import pl.nw.zadanie_06.models.data.User
 import pl.nw.zadanie_06.utils.CartUtils
 
 @LargeTest
@@ -66,168 +63,242 @@ class MainActivityTest {
         }
     }
 
+
+    @Test
+    fun checkNavbarElements() {
+        val textView = onView(
+            allOf(
+                withText("SHOP"),
+                withParent(
+                    allOf(
+                        withContentDescription("Shop"),
+                        withParent(IsInstanceOf.instanceOf(LinearLayout::class.java))
+                    )
+                ),
+                isDisplayed()
+            )
+        )
+        textView.check(matches(withText("SHOP")))
+
+        val textView2 = onView(
+            allOf(
+                withText("CART"),
+                withParent(
+                    allOf(
+                        withContentDescription("Cart"),
+                        withParent(IsInstanceOf.instanceOf(LinearLayout::class.java))
+                    )
+                ),
+                isDisplayed()
+            )
+        )
+        textView2.check(matches(withText("CART")))
+
+        val textView3 = onView(
+            allOf(
+                withText("CATEGORY"),
+                withParent(
+                    allOf(
+                        withContentDescription("Category"),
+                        withParent(IsInstanceOf.instanceOf(LinearLayout::class.java))
+                    )
+                ),
+                isDisplayed()
+            )
+        )
+        textView3.check(matches(withText("CATEGORY")))
+
+        val textView4 = onView(
+            allOf(
+                withText("ADD PRODUCT"),
+                withParent(
+                    allOf(
+                        withContentDescription("Add product"),
+                        withParent(IsInstanceOf.instanceOf(LinearLayout::class.java))
+                    )
+                ),
+                isDisplayed()
+            )
+        )
+        textView4.check(matches(withText("ADD PRODUCT")))
+
+        val textView5 = onView(
+            allOf(
+                withText("MY ACCOUNT"),
+                withParent(
+                    allOf(
+                        withContentDescription("My account"),
+                        withParent(IsInstanceOf.instanceOf(LinearLayout::class.java))
+                    )
+                ),
+                isDisplayed()
+            )
+        )
+        textView5.check(matches(withText("MY ACCOUNT")))
+    }
+
     @Test
     fun switchToCartView() {
-        val tabView = Espresso.onView(
-            Matchers.allOf(
-                ViewMatchers.withContentDescription("Cart"), childAtPosition(
+        val tabView = onView(
+            allOf(
+                withContentDescription("Cart"), childAtPosition(
                     childAtPosition(
-                        ViewMatchers.withId(R.id.pager_tabs), 0
+                        withId(R.id.pager_tabs), 0
                     ), 1
-                ), ViewMatchers.isDisplayed()
+                ), isDisplayed()
             )
         )
         tabView.perform(ViewActions.click())
 
-        val button = Espresso.onView(
-            Matchers.allOf(
-                ViewMatchers.withId(R.id.checkout_button),
-                ViewMatchers.withText("CHECKOUT"),
-                ViewMatchers.withParent(
-                    Matchers.allOf(
-                        ViewMatchers.withId(R.id.checkout_button_wrapper),
-                        ViewMatchers.withParent(IsInstanceOf.instanceOf(ViewGroup::class.java))
+        val button = onView(
+            allOf(
+                withId(R.id.checkout_button),
+                withText("CHECKOUT"),
+                withParent(
+                    allOf(
+                        withId(R.id.checkout_button_wrapper),
+                        withParent(IsInstanceOf.instanceOf(ViewGroup::class.java))
                     )
                 ),
-                ViewMatchers.isDisplayed()
+                isDisplayed()
             )
         )
-        button.check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
+        button.check(matches(isDisplayed()))
     }
 
 
     @Test
     fun switchToCategoryView() {
-        val tabView = Espresso.onView(
-            Matchers.allOf(
-                ViewMatchers.withContentDescription("Category"), childAtPosition(
+        val tabView = onView(
+            allOf(
+                withContentDescription("Category"), childAtPosition(
                     childAtPosition(
-                        ViewMatchers.withId(R.id.pager_tabs), 0
+                        withId(R.id.pager_tabs), 0
                     ), 2
-                ), ViewMatchers.isDisplayed()
+                ), isDisplayed()
             )
         )
         tabView.perform(ViewActions.click())
 
-        val recyclerView = Espresso.onView(
-            Matchers.allOf(
-                ViewMatchers.withParent(
-                    Matchers.allOf(
-                        ViewMatchers.withId(R.id.pager),
-                        ViewMatchers.withParent(IsInstanceOf.instanceOf(LinearLayout::class.java))
+        val recyclerView = onView(
+            allOf(
+                withParent(
+                    allOf(
+                        withId(R.id.pager),
+                        withParent(IsInstanceOf.instanceOf(LinearLayout::class.java))
                     )
-                ), ViewMatchers.isDisplayed()
+                ), isDisplayed()
             )
         )
-        recyclerView.check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
+        recyclerView.check(matches(isDisplayed()))
     }
 
 
     @Test
     fun switchToAddProductView() {
-        val tabView = Espresso.onView(
-            Matchers.allOf(
-                ViewMatchers.withContentDescription("Add product"), childAtPosition(
+        val tabView = onView(
+            allOf(
+                withContentDescription("Add product"), childAtPosition(
                     childAtPosition(
-                        ViewMatchers.withId(R.id.pager_tabs), 0
+                        withId(R.id.pager_tabs), 0
                     ), 3
-                ), ViewMatchers.isDisplayed()
+                ), isDisplayed()
             )
         )
         tabView.perform(ViewActions.click())
 
-        val linearLayout = Espresso.onView(
-            Matchers.allOf(
-                ViewMatchers.withId(R.id.add_product_product_name),
-                ViewMatchers.withParent(ViewMatchers.withParent(IsInstanceOf.instanceOf(FrameLayout::class.java))),
-                ViewMatchers.isDisplayed()
+        val linearLayout = onView(
+            allOf(
+                withId(R.id.add_product_product_name),
+                withParent(withParent(IsInstanceOf.instanceOf(FrameLayout::class.java))),
+                isDisplayed()
             )
         )
-        linearLayout.check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
+        linearLayout.check(matches(isDisplayed()))
 
-        val editText = Espresso.onView(
-            Matchers.allOf(
-                ViewMatchers.withId(R.id.add_product_description_input), ViewMatchers.withParent(
-                    Matchers.allOf(
-                        ViewMatchers.withId(R.id.add_product_product_description),
-                        ViewMatchers.withParent(IsInstanceOf.instanceOf(ViewGroup::class.java))
+        val editText = onView(
+            allOf(
+                withId(R.id.add_product_description_input), withParent(
+                    allOf(
+                        withId(R.id.add_product_product_description),
+                        withParent(IsInstanceOf.instanceOf(ViewGroup::class.java))
                     )
-                ), ViewMatchers.isDisplayed()
+                ), isDisplayed()
             )
         )
-        editText.check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
+        editText.check(matches(isDisplayed()))
 
-        val editText2 = Espresso.onView(
-            Matchers.allOf(
-                ViewMatchers.withId(R.id.add_product_price_input), ViewMatchers.withParent(
-                    Matchers.allOf(
-                        ViewMatchers.withId(R.id.add_product_product_price),
-                        ViewMatchers.withParent(IsInstanceOf.instanceOf(ViewGroup::class.java))
+        val editText2 = onView(
+            allOf(
+                withId(R.id.add_product_price_input), withParent(
+                    allOf(
+                        withId(R.id.add_product_product_price),
+                        withParent(IsInstanceOf.instanceOf(ViewGroup::class.java))
                     )
-                ), ViewMatchers.isDisplayed()
+                ), isDisplayed()
             )
         )
-        editText2.check(ViewAssertions.matches(ViewMatchers.withText("")))
+        editText2.check(matches(withText("")))
 
-        val spinner = Espresso.onView(
-            Matchers.allOf(
-                ViewMatchers.withId(R.id.category_spinner), ViewMatchers.withParent(
-                    Matchers.allOf(
-                        ViewMatchers.withId(R.id.add_product_category_selector),
-                        ViewMatchers.withParent(IsInstanceOf.instanceOf(ViewGroup::class.java))
+        val spinner = onView(
+            allOf(
+                withId(R.id.category_spinner), withParent(
+                    allOf(
+                        withId(R.id.add_product_category_selector),
+                        withParent(IsInstanceOf.instanceOf(ViewGroup::class.java))
                     )
-                ), ViewMatchers.isDisplayed()
+                ), isDisplayed()
             )
         )
-        spinner.check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
+        spinner.check(matches(isDisplayed()))
 
-        val spinner2 = Espresso.onView(
-            Matchers.allOf(
-                ViewMatchers.withId(R.id.category_spinner), ViewMatchers.withParent(
-                    Matchers.allOf(
-                        ViewMatchers.withId(R.id.add_product_category_selector),
-                        ViewMatchers.withParent(IsInstanceOf.instanceOf(ViewGroup::class.java))
+        val spinner2 = onView(
+            allOf(
+                withId(R.id.category_spinner), withParent(
+                    allOf(
+                        withId(R.id.add_product_category_selector),
+                        withParent(IsInstanceOf.instanceOf(ViewGroup::class.java))
                     )
-                ), ViewMatchers.isDisplayed()
+                ), isDisplayed()
             )
         )
-        spinner2.check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
+        spinner2.check(matches(isDisplayed()))
     }
 
 
     @Test
     fun switchToMyAccountView() {
-        val tabView = Espresso.onView(
-            Matchers.allOf(
-                ViewMatchers.withContentDescription("My account"), childAtPosition(
+        val tabView = onView(
+            allOf(
+                withContentDescription("My account"), childAtPosition(
                     childAtPosition(
-                        ViewMatchers.withId(R.id.pager_tabs), 0
+                        withId(R.id.pager_tabs), 0
                     ), 4
-                ), ViewMatchers.isDisplayed()
+                ), isDisplayed()
             )
         )
         tabView.perform(ViewActions.click())
 
-        val textView = Espresso.onView(
-            Matchers.allOf(
-                ViewMatchers.withText("My account"), ViewMatchers.withParent(
-                    Matchers.allOf(
-                        ViewMatchers.withId(R.id.my_account_title_wrapper),
-                        ViewMatchers.withParent(IsInstanceOf.instanceOf(ViewGroup::class.java))
+        val textView = onView(
+            allOf(
+                withText("My account"), withParent(
+                    allOf(
+                        withId(R.id.my_account_title_wrapper),
+                        withParent(IsInstanceOf.instanceOf(ViewGroup::class.java))
                     )
-                ), ViewMatchers.isDisplayed()
+                ), isDisplayed()
             )
         )
-        textView.check(ViewAssertions.matches(ViewMatchers.withText("My account")))
+        textView.check(matches(withText("My account")))
     }
 
 
     @Test
     fun enterProductDetailsView() {
-        val recyclerView = Espresso.onView(
-            Matchers.allOf(
-                ViewMatchers.withId(R.id.product_list), childAtPosition(
-                    ViewMatchers.withId(R.id.item_list), 0
+        val recyclerView = onView(
+            allOf(
+                withId(R.id.product_list), childAtPosition(
+                    withId(R.id.item_list), 0
                 )
             )
         )
@@ -237,28 +308,28 @@ class MainActivityTest {
             )
         )
 
-        val button = Espresso.onView(
-            Matchers.allOf(
-                ViewMatchers.withId(R.id.product_details_back_button),
-                ViewMatchers.withText("BACK"),
-                ViewMatchers.withParent(
-                    Matchers.allOf(
-                        ViewMatchers.withId(R.id.product_details_navbar),
-                        ViewMatchers.withParent(IsInstanceOf.instanceOf(ViewGroup::class.java))
+        val button = onView(
+            allOf(
+                withId(R.id.product_details_back_button),
+                withText("BACK"),
+                withParent(
+                    allOf(
+                        withId(R.id.product_details_navbar),
+                        withParent(IsInstanceOf.instanceOf(ViewGroup::class.java))
                     )
                 ),
-                ViewMatchers.isDisplayed()
+                isDisplayed()
             )
         )
-        button.check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
+        button.check(matches(isDisplayed()))
     }
 
     @Test
     fun addToCart() {
-        val recyclerView = Espresso.onView(
-            Matchers.allOf(
-                ViewMatchers.withId(R.id.product_list), childAtPosition(
-                    ViewMatchers.withId(R.id.item_list), 0
+        val recyclerView = onView(
+            allOf(
+                withId(R.id.product_list), childAtPosition(
+                    withId(R.id.item_list), 0
                 )
             )
         )
@@ -268,103 +339,103 @@ class MainActivityTest {
             )
         )
 
-        val materialButton = Espresso.onView(
-            Matchers.allOf(
-                ViewMatchers.withId(R.id.product_details_add_to_cart),
-                ViewMatchers.withText("Add to cart"),
+        val materialButton = onView(
+            allOf(
+                withId(R.id.product_details_add_to_cart),
+                withText("Add to cart"),
                 childAtPosition(
                     childAtPosition(
-                        ViewMatchers.withClassName(Matchers.`is`("android.widget.LinearLayout")), 1
+                        withClassName(Matchers.`is`("android.widget.LinearLayout")), 1
                     ), 2
                 ),
-                ViewMatchers.isDisplayed()
+                isDisplayed()
             )
         )
         materialButton.perform(ViewActions.click())
 
-        val materialButton2 = Espresso.onView(
-            Matchers.allOf(
-                ViewMatchers.withId(R.id.product_details_back_button),
-                ViewMatchers.withText("BACK"),
+        val materialButton2 = onView(
+            allOf(
+                withId(R.id.product_details_back_button),
+                withText("BACK"),
                 childAtPosition(
-                    Matchers.allOf(
-                        ViewMatchers.withId(R.id.product_details_navbar), childAtPosition(
-                            ViewMatchers.withClassName(Matchers.`is`("androidx.constraintlayout.widget.ConstraintLayout")),
+                    allOf(
+                        withId(R.id.product_details_navbar), childAtPosition(
+                            withClassName(Matchers.`is`("androidx.constraintlayout.widget.ConstraintLayout")),
                             0
                         )
                     ), 0
                 ),
-                ViewMatchers.isDisplayed()
+                isDisplayed()
             )
         )
         materialButton2.perform(ViewActions.click())
 
-        val tabView = Espresso.onView(
-            Matchers.allOf(
-                ViewMatchers.withContentDescription("Cart"), childAtPosition(
+        val tabView = onView(
+            allOf(
+                withContentDescription("Cart"), childAtPosition(
                     childAtPosition(
-                        ViewMatchers.withId(R.id.pager_tabs), 0
+                        withId(R.id.pager_tabs), 0
                     ), 1
-                ), ViewMatchers.isDisplayed()
+                ), isDisplayed()
             )
         )
         tabView.perform(ViewActions.click())
 
-        val textView = Espresso.onView(
-            Matchers.allOf(
-                ViewMatchers.withId(R.id.cart_item_quantity),
-                ViewMatchers.withText("1"),
-                ViewMatchers.withParent(
-                    ViewMatchers.withParent(
+        val textView = onView(
+            allOf(
+                withId(R.id.cart_item_quantity),
+                withText("1"),
+                withParent(
+                    withParent(
                         IsInstanceOf.instanceOf(
                             RelativeLayout::class.java
                         )
                     )
                 ),
-                ViewMatchers.isDisplayed()
+                isDisplayed()
             )
         )
-        textView.check(ViewAssertions.matches(ViewMatchers.withText("1")))
+        textView.check(matches(withText("1")))
     }
 
 
     @Test
     fun decreaseItemAmountInCart() {
-        val tabView = Espresso.onView(
-            Matchers.allOf(
-                ViewMatchers.withContentDescription("Cart"),
+        val tabView = onView(
+            allOf(
+                withContentDescription("Cart"),
                 childAtPosition(
                     childAtPosition(
-                        ViewMatchers.withId(R.id.pager_tabs),
+                        withId(R.id.pager_tabs),
                         0
                     ),
                     1
                 ),
-                ViewMatchers.isDisplayed()
+                isDisplayed()
             )
         )
         tabView.perform(ViewActions.click())
 
-        val tabView2 = Espresso.onView(
-            Matchers.allOf(
-                ViewMatchers.withContentDescription("Shop"),
+        val tabView2 = onView(
+            allOf(
+                withContentDescription("Shop"),
                 childAtPosition(
                     childAtPosition(
-                        ViewMatchers.withId(R.id.pager_tabs),
+                        withId(R.id.pager_tabs),
                         0
                     ),
                     0
                 ),
-                ViewMatchers.isDisplayed()
+                isDisplayed()
             )
         )
         tabView2.perform(ViewActions.click())
 
-        val recyclerView = Espresso.onView(
-            Matchers.allOf(
-                ViewMatchers.withId(R.id.product_list),
+        val recyclerView = onView(
+            allOf(
+                withId(R.id.product_list),
                 childAtPosition(
-                    ViewMatchers.withId(R.id.item_list),
+                    withId(R.id.item_list),
                     0
                 )
             )
@@ -376,110 +447,110 @@ class MainActivityTest {
             )
         )
 
-        val materialButton = Espresso.onView(
-            Matchers.allOf(
-                ViewMatchers.withId(R.id.product_details_add_to_cart),
-                ViewMatchers.withText("Add to cart"),
+        val materialButton = onView(
+            allOf(
+                withId(R.id.product_details_add_to_cart),
+                withText("Add to cart"),
                 childAtPosition(
                     childAtPosition(
-                        ViewMatchers.withClassName(Matchers.`is`("android.widget.LinearLayout")),
+                        withClassName(Matchers.`is`("android.widget.LinearLayout")),
                         1
                     ),
                     2
                 ),
-                ViewMatchers.isDisplayed()
+                isDisplayed()
             )
         )
         materialButton.perform(ViewActions.click())
 
-        val materialButton2 = Espresso.onView(
-            Matchers.allOf(
-                ViewMatchers.withId(R.id.product_details_add_to_cart),
-                ViewMatchers.withText("Add to cart"),
+        val materialButton2 = onView(
+            allOf(
+                withId(R.id.product_details_add_to_cart),
+                withText("Add to cart"),
                 childAtPosition(
                     childAtPosition(
-                        ViewMatchers.withClassName(Matchers.`is`("android.widget.LinearLayout")),
+                        withClassName(Matchers.`is`("android.widget.LinearLayout")),
                         1
                     ),
                     2
                 ),
-                ViewMatchers.isDisplayed()
+                isDisplayed()
             )
         )
         materialButton2.perform(ViewActions.click())
 
-        val materialButton3 = Espresso.onView(
-            Matchers.allOf(
-                ViewMatchers.withId(R.id.product_details_back_button),
-                ViewMatchers.withText("BACK"),
+        val materialButton3 = onView(
+            allOf(
+                withId(R.id.product_details_back_button),
+                withText("BACK"),
                 childAtPosition(
-                    Matchers.allOf(
-                        ViewMatchers.withId(R.id.product_details_navbar),
+                    allOf(
+                        withId(R.id.product_details_navbar),
                         childAtPosition(
-                            ViewMatchers.withClassName(Matchers.`is`("androidx.constraintlayout.widget.ConstraintLayout")),
+                            withClassName(Matchers.`is`("androidx.constraintlayout.widget.ConstraintLayout")),
                             0
                         )
                     ),
                     0
                 ),
-                ViewMatchers.isDisplayed()
+                isDisplayed()
             )
         )
         materialButton3.perform(ViewActions.click())
 
-        val tabView3 = Espresso.onView(
-            Matchers.allOf(
-                ViewMatchers.withContentDescription("Cart"),
+        val tabView3 = onView(
+            allOf(
+                withContentDescription("Cart"),
                 childAtPosition(
                     childAtPosition(
-                        ViewMatchers.withId(R.id.pager_tabs),
+                        withId(R.id.pager_tabs),
                         0
                     ),
                     1
                 ),
-                ViewMatchers.isDisplayed()
+                isDisplayed()
             )
         )
         tabView3.perform(ViewActions.click())
 
-        val materialTextView = Espresso.onView(
-            Matchers.allOf(
-                ViewMatchers.withId(R.id.cart_item_remove), ViewMatchers.withText("-"),
+        val materialTextView = onView(
+            allOf(
+                withId(R.id.cart_item_remove), withText("-"),
                 childAtPosition(
                     childAtPosition(
-                        ViewMatchers.withClassName(Matchers.`is`("android.widget.RelativeLayout")),
+                        withClassName(Matchers.`is`("android.widget.RelativeLayout")),
                         1
                     ),
                     0
                 ),
-                ViewMatchers.isDisplayed()
+                isDisplayed()
             )
         )
         materialTextView.perform(ViewActions.click())
 
-        val textView = Espresso.onView(
-            Matchers.allOf(
-                ViewMatchers.withId(R.id.cart_item_quantity), ViewMatchers.withText("1"),
-                ViewMatchers.withParent(
-                    ViewMatchers.withParent(
+        val textView = onView(
+            allOf(
+                withId(R.id.cart_item_quantity), withText("1"),
+                withParent(
+                    withParent(
                         IsInstanceOf.instanceOf(
                             RelativeLayout::class.java
                         )
                     )
                 ),
-                ViewMatchers.isDisplayed()
+                isDisplayed()
             )
         )
-        textView.check(ViewAssertions.matches(ViewMatchers.withText("1")))
+        textView.check(matches(withText("1")))
     }
 
     @Test
     fun addQuantityTwo() {
-        val recyclerView = Espresso.onView(
-            Matchers.allOf(
-                ViewMatchers.withId(R.id.product_list),
+        val recyclerView = onView(
+            allOf(
+                withId(R.id.product_list),
                 childAtPosition(
-                    ViewMatchers.withId(R.id.item_list),
+                    withId(R.id.item_list),
                     0
                 )
             )
@@ -491,243 +562,168 @@ class MainActivityTest {
             )
         )
 
-        val materialButton = Espresso.onView(
-            Matchers.allOf(
-                ViewMatchers.withId(R.id.product_details_add_to_cart),
-                ViewMatchers.withText("Add to cart"),
+        val materialButton = onView(
+            allOf(
+                withId(R.id.product_details_add_to_cart),
+                withText("Add to cart"),
                 childAtPosition(
                     childAtPosition(
-                        ViewMatchers.withClassName(Matchers.`is`("android.widget.LinearLayout")),
+                        withClassName(Matchers.`is`("android.widget.LinearLayout")),
                         1
                     ),
                     2
                 ),
-                ViewMatchers.isDisplayed()
+                isDisplayed()
             )
         )
         materialButton.perform(ViewActions.click())
 
-        val materialButton2 = Espresso.onView(
-            Matchers.allOf(
-                ViewMatchers.withId(R.id.product_details_back_button),
-                ViewMatchers.withText("BACK"),
+        val materialButton2 = onView(
+            allOf(
+                withId(R.id.product_details_back_button),
+                withText("BACK"),
                 childAtPosition(
-                    Matchers.allOf(
-                        ViewMatchers.withId(R.id.product_details_navbar),
+                    allOf(
+                        withId(R.id.product_details_navbar),
                         childAtPosition(
-                            ViewMatchers.withClassName(Matchers.`is`("androidx.constraintlayout.widget.ConstraintLayout")),
+                            withClassName(Matchers.`is`("androidx.constraintlayout.widget.ConstraintLayout")),
                             0
                         )
                     ),
                     0
                 ),
-                ViewMatchers.isDisplayed()
+                isDisplayed()
             )
         )
         materialButton2.perform(ViewActions.click())
 
-        val tabView = Espresso.onView(
-            Matchers.allOf(
-                ViewMatchers.withContentDescription("Cart"),
+        val tabView = onView(
+            allOf(
+                withContentDescription("Cart"),
                 childAtPosition(
                     childAtPosition(
-                        ViewMatchers.withId(R.id.pager_tabs),
+                        withId(R.id.pager_tabs),
                         0
                     ),
                     1
                 ),
-                ViewMatchers.isDisplayed()
+                isDisplayed()
             )
         )
         tabView.perform(ViewActions.click())
 
-        val materialTextView = Espresso.onView(
-            Matchers.allOf(
-                ViewMatchers.withId(R.id.cart_item_add), ViewMatchers.withText("+"),
+        val materialTextView = onView(
+            allOf(
+                withId(R.id.cart_item_add), withText("+"),
                 childAtPosition(
                     childAtPosition(
-                        ViewMatchers.withClassName(Matchers.`is`("android.widget.RelativeLayout")),
+                        withClassName(Matchers.`is`("android.widget.RelativeLayout")),
                         1
                     ),
                     2
                 ),
-                ViewMatchers.isDisplayed()
+                isDisplayed()
             )
         )
         materialTextView.perform(ViewActions.click())
 
-        val textView = Espresso.onView(
-            Matchers.allOf(
-                ViewMatchers.withId(R.id.cart_item_quantity), ViewMatchers.withText("2"),
-                ViewMatchers.withParent(
-                    ViewMatchers.withParent(
+        val textView = onView(
+            allOf(
+                withId(R.id.cart_item_quantity), withText("2"),
+                withParent(
+                    withParent(
                         IsInstanceOf.instanceOf(
                             RelativeLayout::class.java
                         )
                     )
                 ),
-                ViewMatchers.isDisplayed()
+                isDisplayed()
             )
         )
-        textView.check(ViewAssertions.matches(ViewMatchers.withText("2")))
+        textView.check(matches(withText("2")))
     }
 
-
     @Test
-    fun addTwoDifferentProductsToCart() {
-        val recyclerView = Espresso.onView(
-            Matchers.allOf(
-                ViewMatchers.withId(R.id.product_list),
-                childAtPosition(
-                    ViewMatchers.withId(R.id.item_list),
-                    0
-                )
-            )
-        )
-        recyclerView.perform(
-            RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(
-                0,
-                ViewActions.click()
-            )
-        )
-
-        val materialButton = Espresso.onView(
-            Matchers.allOf(
-                ViewMatchers.withId(R.id.product_details_add_to_cart),
-                ViewMatchers.withText("Add to cart"),
+    fun goToOrdersView() {
+        val tabView = onView(
+            allOf(
+                withContentDescription("My account"),
                 childAtPosition(
                     childAtPosition(
-                        ViewMatchers.withClassName(Matchers.`is`("android.widget.LinearLayout")),
-                        1
-                    ),
-                    2
-                ),
-                ViewMatchers.isDisplayed()
-            )
-        )
-        materialButton.perform(ViewActions.click())
-
-        val materialButton2 = Espresso.onView(
-            Matchers.allOf(
-                ViewMatchers.withId(R.id.product_details_back_button),
-                ViewMatchers.withText("BACK"),
-                childAtPosition(
-                    Matchers.allOf(
-                        ViewMatchers.withId(R.id.product_details_navbar),
-                        childAtPosition(
-                            ViewMatchers.withClassName(Matchers.`is`("androidx.constraintlayout.widget.ConstraintLayout")),
-                            0
-                        )
-                    ),
-                    0
-                ),
-                ViewMatchers.isDisplayed()
-            )
-        )
-        materialButton2.perform(ViewActions.click())
-
-        val recyclerView2 = Espresso.onView(
-            Matchers.allOf(
-                ViewMatchers.withId(R.id.product_list),
-                childAtPosition(
-                    ViewMatchers.withId(R.id.item_list),
-                    0
-                )
-            )
-        )
-        recyclerView2.perform(
-            RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(
-                1,
-                ViewActions.click()
-            )
-        )
-
-        val materialButton3 = Espresso.onView(
-            Matchers.allOf(
-                ViewMatchers.withId(R.id.product_details_add_to_cart),
-                ViewMatchers.withText("Add to cart"),
-                childAtPosition(
-                    childAtPosition(
-                        ViewMatchers.withClassName(Matchers.`is`("android.widget.LinearLayout")),
-                        1
-                    ),
-                    2
-                ),
-                ViewMatchers.isDisplayed()
-            )
-        )
-        materialButton3.perform(ViewActions.click())
-
-        val materialButton4 = Espresso.onView(
-            Matchers.allOf(
-                ViewMatchers.withId(R.id.product_details_back_button),
-                ViewMatchers.withText("BACK"),
-                childAtPosition(
-                    Matchers.allOf(
-                        ViewMatchers.withId(R.id.product_details_navbar),
-                        childAtPosition(
-                            ViewMatchers.withClassName(Matchers.`is`("androidx.constraintlayout.widget.ConstraintLayout")),
-                            0
-                        )
-                    ),
-                    0
-                ),
-                ViewMatchers.isDisplayed()
-            )
-        )
-        materialButton4.perform(ViewActions.click())
-
-        val tabView = Espresso.onView(
-            Matchers.allOf(
-                ViewMatchers.withContentDescription("Cart"),
-                childAtPosition(
-                    childAtPosition(
-                        ViewMatchers.withId(R.id.pager_tabs),
+                        withId(R.id.pager_tabs),
                         0
                     ),
-                    1
+                    4
                 ),
-                ViewMatchers.isDisplayed()
+                isDisplayed()
             )
         )
         tabView.perform(ViewActions.click())
 
-        val textView = Espresso.onView(
-            Matchers.allOf(
-                ViewMatchers.withId(R.id.cart_item_name), ViewMatchers.withText("Apple juice"),
-                ViewMatchers.withParent(
-                    Matchers.allOf(
-                        ViewMatchers.withId(R.id.cart_item_first_column),
-                        ViewMatchers.withParent(IsInstanceOf.instanceOf(RelativeLayout::class.java))
-                    )
+        val materialButton = onView(
+            allOf(
+                withId(R.id.goto_orders_button), withText("Orders"),
+                childAtPosition(
+                    allOf(
+                        withId(R.id.goto_orders_wrapper),
+                        childAtPosition(
+                            withClassName(Matchers.`is`("androidx.constraintlayout.widget.ConstraintLayout")),
+                            1
+                        )
+                    ),
+                    0
                 ),
-                ViewMatchers.isDisplayed()
+                isDisplayed()
             )
         )
-        textView.check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
+        materialButton.perform(ViewActions.click())
 
-        val textView2 = Espresso.onView(
-            Matchers.allOf(
-                ViewMatchers.withId(R.id.cart_item_name), ViewMatchers.withText("Orange Juice"),
-                ViewMatchers.withParent(
-                    Matchers.allOf(
-                        ViewMatchers.withId(R.id.cart_item_first_column),
-                        ViewMatchers.withParent(IsInstanceOf.instanceOf(RelativeLayout::class.java))
-                    )
-                ),
-                ViewMatchers.isDisplayed()
+        val textView = onView(
+            allOf(
+                withText("Orders"),
+                withParent(withParent(IsInstanceOf.instanceOf(ViewGroup::class.java))),
+                isDisplayed()
             )
         )
-        textView2.check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
+        textView.check(matches(isDisplayed()))
     }
-
     @Test
     fun goToCheckoutView() {
-        val recyclerView = Espresso.onView(
-            Matchers.allOf(
-                ViewMatchers.withId(R.id.product_list),
+        val tabView = onView(
+            allOf(
+                withContentDescription("Cart"),
                 childAtPosition(
-                    ViewMatchers.withId(R.id.item_list),
+                    childAtPosition(
+                        withId(R.id.pager_tabs),
+                        0
+                    ),
+                    1
+                ),
+                isDisplayed()
+            )
+        )
+        tabView.perform(ViewActions.click())
+
+        val tabView2 = onView(
+            allOf(
+                withContentDescription("Shop"),
+                childAtPosition(
+                    childAtPosition(
+                        withId(R.id.pager_tabs),
+                        0
+                    ),
+                    0
+                ),
+                isDisplayed()
+            )
+        )
+        tabView2.perform(ViewActions.click())
+
+        val recyclerView = onView(
+            allOf(
+                withId(R.id.product_list),
+                childAtPosition(
+                    withId(R.id.item_list),
                     0
                 )
             )
@@ -739,88 +735,789 @@ class MainActivityTest {
             )
         )
 
-        val materialButton = Espresso.onView(
-            Matchers.allOf(
-                ViewMatchers.withId(R.id.product_details_add_to_cart),
-                ViewMatchers.withText("Add to cart"),
+        val materialButton = onView(
+            allOf(
+                withId(R.id.product_details_add_to_cart),
+                withText("Add to cart"),
                 childAtPosition(
                     childAtPosition(
-                        ViewMatchers.withClassName(Matchers.`is`("android.widget.LinearLayout")),
+                        withClassName(Matchers.`is`("android.widget.LinearLayout")),
                         1
                     ),
                     2
                 ),
-                ViewMatchers.isDisplayed()
+                isDisplayed()
             )
         )
         materialButton.perform(ViewActions.click())
 
-        val materialButton2 = Espresso.onView(
-            Matchers.allOf(
-                ViewMatchers.withId(R.id.product_details_back_button),
-                ViewMatchers.withText("BACK"),
+        val materialButton2 = onView(
+            allOf(
+                withId(R.id.product_details_back_button),
+                withText("BACK"),
                 childAtPosition(
-                    Matchers.allOf(
-                        ViewMatchers.withId(R.id.product_details_navbar),
+                    allOf(
+                        withId(R.id.product_details_navbar),
                         childAtPosition(
-                            ViewMatchers.withClassName(Matchers.`is`("androidx.constraintlayout.widget.ConstraintLayout")),
+                            withClassName(Matchers.`is`("androidx.constraintlayout.widget.ConstraintLayout")),
                             0
                         )
                     ),
                     0
                 ),
-                ViewMatchers.isDisplayed()
+                isDisplayed()
             )
         )
         materialButton2.perform(ViewActions.click())
 
-        val tabView = Espresso.onView(
-            Matchers.allOf(
-                ViewMatchers.withContentDescription("Cart"),
+        val tabView3 = onView(
+            allOf(
+                withContentDescription("Cart"),
                 childAtPosition(
                     childAtPosition(
-                        ViewMatchers.withId(R.id.pager_tabs),
+                        withId(R.id.pager_tabs),
                         0
                     ),
                     1
                 ),
-                ViewMatchers.isDisplayed()
+                isDisplayed()
             )
         )
-        tabView.perform(ViewActions.click())
+        tabView3.perform(ViewActions.click())
 
-        val materialButton3 = Espresso.onView(
-            Matchers.allOf(
-                ViewMatchers.withId(R.id.checkout_button), ViewMatchers.withText("Checkout"),
+        val materialButton3 = onView(
+            allOf(
+                withId(R.id.checkout_button), withText("Checkout"),
                 childAtPosition(
-                    Matchers.allOf(
-                        ViewMatchers.withId(R.id.checkout_button_wrapper),
+                    allOf(
+                        withId(R.id.checkout_button_wrapper),
                         childAtPosition(
-                            ViewMatchers.withClassName(Matchers.`is`("androidx.constraintlayout.widget.ConstraintLayout")),
+                            withClassName(Matchers.`is`("androidx.constraintlayout.widget.ConstraintLayout")),
                             2
                         )
                     ),
                     0
                 ),
-                ViewMatchers.isDisplayed()
+                isDisplayed()
             )
         )
         materialButton3.perform(ViewActions.click())
 
-        val textView = Espresso.onView(
-            Matchers.allOf(
-                ViewMatchers.withText("Checkout"),
-                ViewMatchers.withParent(
-                    Matchers.allOf(
-                        ViewMatchers.withId(R.id.checkout_heading),
-                        ViewMatchers.withParent(IsInstanceOf.instanceOf(ViewGroup::class.java))
+        val textView = onView(
+            allOf(
+                withText("Checkout"),
+                withParent(
+                    allOf(
+                        withId(R.id.checkout_heading),
+                        withParent(IsInstanceOf.instanceOf(ViewGroup::class.java))
                     )
                 ),
-                ViewMatchers.isDisplayed()
+                isDisplayed()
             )
         )
-        textView.check(ViewAssertions.matches(ViewMatchers.withText("Checkout")))
+        textView.check(matches(isDisplayed()))
+    }
 
+
+
+
+    @Test
+    fun switchToCartThenProducts() {
+        val tabView = onView(
+            allOf(
+                withContentDescription("Cart"),
+                childAtPosition(
+                    childAtPosition(
+                        withId(R.id.pager_tabs),
+                        0
+                    ),
+                    1
+                ),
+                isDisplayed()
+            )
+        )
+        tabView.perform(ViewActions.click())
+
+        val tabView2 = onView(
+            allOf(
+                withContentDescription("Shop"),
+                childAtPosition(
+                    childAtPosition(
+                        withId(R.id.pager_tabs),
+                        0
+                    ),
+                    0
+                ),
+                isDisplayed()
+            )
+        )
+        tabView2.perform(ViewActions.click())
+
+        val linearLayout = onView(
+            allOf(
+                withId(R.id.item_list),
+                isDisplayed()
+            )
+        )
+        linearLayout.check(matches(isDisplayed()))
+    }
+
+
+    @Test
+    fun appTraversal() {
+
+        val tabView = onView(
+            allOf(
+                withContentDescription("Shop"),
+                childAtPosition(
+                    childAtPosition(
+                        withId(R.id.pager_tabs),
+                        0
+                    ),
+                    0
+                ),
+                isDisplayed()
+            )
+        )
+        tabView.perform(ViewActions.click())
+
+        val textView = onView(
+            allOf(
+                withId(R.id.product_list_title),
+                withText("Shop"),
+                withParent(withParent(IsInstanceOf.instanceOf(android.view.ViewGroup::class.java))),
+                isDisplayed()
+            )
+        )
+        textView.check(matches(isDisplayed()))
+
+        val tabView2 = onView(
+            allOf(
+                withContentDescription("Cart"),
+                childAtPosition(
+                    childAtPosition(
+                        withId(R.id.pager_tabs),
+                        0
+                    ),
+                    1
+                ),
+                isDisplayed()
+            )
+        )
+        tabView2.perform(ViewActions.click())
+
+        val textView2 = onView(
+            allOf(
+                withId(R.id.cart_title),
+                withText("Cart"),
+                withParent(withParent(IsInstanceOf.instanceOf(android.view.ViewGroup::class.java))),
+                isDisplayed()
+            )
+        )
+        textView2.check(matches(isDisplayed()))
+
+        val button = onView(
+            allOf(
+                withId(R.id.checkout_button), withText("CHECKOUT"),
+                withParent(
+                    allOf(
+                        withId(R.id.checkout_button_wrapper),
+                        withParent(IsInstanceOf.instanceOf(android.view.ViewGroup::class.java))
+                    )
+                ),
+                isDisplayed()
+            )
+        )
+        button.check(matches(isDisplayed()))
+
+        val tabView3 = onView(
+            allOf(
+                withContentDescription("Category"),
+                childAtPosition(
+                    childAtPosition(
+                        withId(R.id.pager_tabs),
+                        0
+                    ),
+                    2
+                ),
+                isDisplayed()
+            )
+        )
+        tabView3.perform(ViewActions.click())
+
+        val textView3 = onView(
+            allOf(
+                withId(R.id.categories_title),
+                withText("Categories"),
+                withParent(withParent(IsInstanceOf.instanceOf(android.view.ViewGroup::class.java))),
+                isDisplayed()
+            )
+        )
+        textView3.check(matches(isDisplayed()))
+
+        val tabView4 = onView(
+            allOf(
+                withContentDescription("Add product"),
+                childAtPosition(
+                    childAtPosition(
+                        withId(R.id.pager_tabs),
+                        0
+                    ),
+                    3
+                ),
+                isDisplayed()
+            )
+        )
+        tabView4.perform(ViewActions.click())
+
+        val textView4 = onView(
+            allOf(
+                withText("Add product"),
+                withParent(
+                    allOf(
+                        withId(R.id.add_product_heading),
+                        withParent(IsInstanceOf.instanceOf(android.view.ViewGroup::class.java))
+                    )
+                ),
+                isDisplayed()
+            )
+        )
+        textView4.check(matches(isDisplayed()))
+
+        val textView5 = onView(
+            allOf(
+                withText("Name"),
+                withParent(
+                    allOf(
+                        withId(R.id.add_product_product_name),
+                        withParent(IsInstanceOf.instanceOf(android.view.ViewGroup::class.java))
+                    )
+                ),
+                isDisplayed()
+            )
+        )
+        textView5.check(matches(isDisplayed()))
+
+        val textView6 = onView(
+            allOf(
+                withText("Description"),
+                withParent(
+                    allOf(
+                        withId(R.id.add_product_product_description),
+                        withParent(IsInstanceOf.instanceOf(android.view.ViewGroup::class.java))
+                    )
+                ),
+                isDisplayed()
+            )
+        )
+        textView6.check(matches(isDisplayed()))
+
+        val textView7 = onView(
+            allOf(
+                withText("Price"),
+                withParent(
+                    allOf(
+                        withId(R.id.add_product_product_price),
+                        withParent(IsInstanceOf.instanceOf(android.view.ViewGroup::class.java))
+                    )
+                ),
+                isDisplayed()
+            )
+        )
+        textView7.check(matches(isDisplayed()))
+
+        val textView8 = onView(
+            allOf(
+                withText("Category"),
+                withParent(
+                    allOf(
+                        withId(R.id.add_product_category_selector),
+                        withParent(IsInstanceOf.instanceOf(android.view.ViewGroup::class.java))
+                    )
+                ),
+                isDisplayed()
+            )
+        )
+        textView8.check(matches(isDisplayed()))
+
+        val button2 = onView(
+            allOf(
+                withId(R.id.add_product_add_button), withText("ADD"),
+                withParent(
+                    allOf(
+                        withId(R.id.add_product_add_button_wrapper),
+                        withParent(IsInstanceOf.instanceOf(android.view.ViewGroup::class.java))
+                    )
+                ),
+                isDisplayed()
+            )
+        )
+        button2.check(matches(isDisplayed()))
+
+        val tabView5 = onView(
+            allOf(
+                withContentDescription("My account"),
+                childAtPosition(
+                    childAtPosition(
+                        withId(R.id.pager_tabs),
+                        0
+                    ),
+                    4
+                ),
+                isDisplayed()
+            )
+        )
+        tabView5.perform(ViewActions.click())
+
+        val textView9 = onView(
+            allOf(
+                withId(R.id.my_account_title),
+                withText("My account"),
+                withParent(
+                    allOf(
+                        withId(R.id.my_account_title_wrapper),
+                        withParent(IsInstanceOf.instanceOf(android.view.ViewGroup::class.java))
+                    )
+                ),
+                isDisplayed()
+            )
+        )
+        textView9.check(matches(isDisplayed()))
+
+        val button3 = onView(
+            allOf(
+                withId(R.id.goto_orders_button), withText("ORDERS"),
+                withParent(
+                    allOf(
+                        withId(R.id.goto_orders_wrapper),
+                        withParent(IsInstanceOf.instanceOf(android.view.ViewGroup::class.java))
+                    )
+                ),
+                isDisplayed()
+            )
+        )
+        button3.check(matches(isDisplayed()))
+
+        val materialButton = onView(
+            allOf(
+                withId(R.id.goto_orders_button), withText("Orders"),
+                childAtPosition(
+                    allOf(
+                        withId(R.id.goto_orders_wrapper),
+                        childAtPosition(
+                            withClassName(Matchers.`is`("androidx.constraintlayout.widget.ConstraintLayout")),
+                            1
+                        )
+                    ),
+                    0
+                ),
+                isDisplayed()
+            )
+        )
+        materialButton.perform(ViewActions.click())
+
+        val textView10 = onView(
+            allOf(
+                withId(R.id.orders_title),
+                withText("Orders"),
+                withParent(withParent(IsInstanceOf.instanceOf(android.view.ViewGroup::class.java))),
+                isDisplayed()
+            )
+        )
+        textView10.check(matches(isDisplayed()))
+    }
+
+
+    @Test
+    fun verifyCheckoutFields() {
+        val tabView0 = onView(
+            allOf(
+                withContentDescription("Cart"),
+                childAtPosition(
+                    childAtPosition(
+                        withId(R.id.pager_tabs),
+                        0
+                    ),
+                    1
+                ),
+                isDisplayed()
+            )
+        )
+        tabView0.perform(ViewActions.click())
+
+        val tabView2 = onView(
+            allOf(
+                withContentDescription("Shop"),
+                childAtPosition(
+                    childAtPosition(
+                        withId(R.id.pager_tabs),
+                        0
+                    ),
+                    0
+                ),
+                isDisplayed()
+            )
+        )
+        tabView2.perform(ViewActions.click())
+
+        val recyclerView = onView(
+            allOf(
+                withId(R.id.product_list),
+                childAtPosition(
+                    withId(R.id.item_list),
+                    0
+                )
+            )
+        )
+        recyclerView.perform(
+            RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(
+                0,
+                ViewActions.click()
+            )
+        )
+
+        val materialButton = onView(
+            allOf(
+                withId(R.id.product_details_add_to_cart), withText("Add to cart"),
+                childAtPosition(
+                    childAtPosition(
+                        withClassName(Matchers.`is`("android.widget.LinearLayout")),
+                        1
+                    ),
+                    2
+                ),
+                isDisplayed()
+            )
+        )
+        materialButton.perform(ViewActions.click())
+
+        val materialButton2 = onView(
+            allOf(
+                withId(R.id.product_details_back_button), withText("BACK"),
+                childAtPosition(
+                    allOf(
+                        withId(R.id.product_details_navbar),
+                        childAtPosition(
+                            withClassName(Matchers.`is`("androidx.constraintlayout.widget.ConstraintLayout")),
+                            0
+                        )
+                    ),
+                    0
+                ),
+                isDisplayed()
+            )
+        )
+        materialButton2.perform(ViewActions.click())
+
+        val tabView = onView(
+            allOf(
+                withContentDescription("Cart"),
+                childAtPosition(
+                    childAtPosition(
+                        withId(R.id.pager_tabs),
+                        0
+                    ),
+                    1
+                ),
+                isDisplayed()
+            )
+        )
+        tabView.perform(ViewActions.click())
+
+        val textView = onView(
+            allOf(
+                withId(R.id.cart_title), withText("Cart"),
+                withParent(withParent(IsInstanceOf.instanceOf(android.view.ViewGroup::class.java))),
+                isDisplayed()
+            )
+        )
+        textView.check(matches(withText("Cart")))
+
+        val textView2 = onView(
+            allOf(
+                withId(R.id.cart_item_quantity), withText("1"),
+                withParent(withParent(IsInstanceOf.instanceOf(android.widget.RelativeLayout::class.java))),
+                isDisplayed()
+            )
+        )
+        textView2.check(matches(withText("1")))
+
+        val button = onView(
+            allOf(
+                withId(R.id.checkout_button), withText("CHECKOUT"),
+                withParent(
+                    allOf(
+                        withId(R.id.checkout_button_wrapper),
+                        withParent(IsInstanceOf.instanceOf(android.view.ViewGroup::class.java))
+                    )
+                ),
+                isDisplayed()
+            )
+        )
+        button.check(matches(isDisplayed()))
+
+        val materialButton3 = onView(
+            allOf(
+                withId(R.id.checkout_button), withText("Checkout"),
+                childAtPosition(
+                    allOf(
+                        withId(R.id.checkout_button_wrapper),
+                        childAtPosition(
+                            withClassName(Matchers.`is`("androidx.constraintlayout.widget.ConstraintLayout")),
+                            2
+                        )
+                    ),
+                    0
+                ),
+                isDisplayed()
+            )
+        )
+        materialButton3.perform(ViewActions.click())
+
+        val textView3 = onView(
+            allOf(
+                withText("Checkout"),
+                withParent(
+                    allOf(
+                        withId(R.id.checkout_heading),
+                        withParent(IsInstanceOf.instanceOf(android.view.ViewGroup::class.java))
+                    )
+                ),
+                isDisplayed()
+            )
+        )
+        textView3.check(matches(withText("Checkout")))
+
+        val textView4 = onView(
+            allOf(
+                withId(R.id.checkout_total_price),
+                withParent(
+                    allOf(
+                        withId(R.id.checkout_heading),
+                        withParent(IsInstanceOf.instanceOf(android.view.ViewGroup::class.java))
+                    )
+                ),
+                isDisplayed()
+            )
+        )
+        textView4.check(matches(isDisplayed()))
+
+        val textView5 = onView(
+            allOf(
+                withText("Address (line 1)"),
+                withParent(
+                    allOf(
+                        withId(R.id.checkout_address_1),
+                        withParent(IsInstanceOf.instanceOf(android.view.ViewGroup::class.java))
+                    )
+                ),
+                isDisplayed()
+            )
+        )
+        textView5.check(matches(isDisplayed()))
+
+        val textView6 = onView(
+            allOf(
+                withText("Address (line 2)"),
+                withParent(
+                    allOf(
+                        withId(R.id.checkout_address_2),
+                        withParent(IsInstanceOf.instanceOf(android.view.ViewGroup::class.java))
+                    )
+                ),
+                isDisplayed()
+            )
+        )
+        textView6.check(matches(isDisplayed()))
+
+        val textView7 = onView(
+            allOf(
+                withText("Post code"),
+                withParent(
+                    allOf(
+                        withId(R.id.checkout_post_code),
+                        withParent(IsInstanceOf.instanceOf(android.view.ViewGroup::class.java))
+                    )
+                ),
+                isDisplayed()
+            )
+        )
+        textView7.check(matches(isDisplayed()))
+
+        val textView8 = onView(
+            allOf(
+                withText("City"),
+                withParent(
+                    allOf(
+                        withId(R.id.checkout_city),
+                        withParent(IsInstanceOf.instanceOf(android.view.ViewGroup::class.java))
+                    )
+                ),
+                isDisplayed()
+            )
+        )
+        textView8.check(matches(isDisplayed()))
+
+        val button2 = onView(
+            allOf(
+                withId(R.id.pay_with_stripe_button), withText("PAY WITH STRIPE"),
+                withParent(
+                    allOf(
+                        withId(R.id.checkout_button_wrapper),
+                        withParent(IsInstanceOf.instanceOf(android.view.ViewGroup::class.java))
+                    )
+                ),
+                isDisplayed()
+            )
+        )
+        button2.check(matches(isDisplayed()))
+
+        val button3 = onView(
+            allOf(
+                withId(R.id.pay_with_payu_button), withText("PAY WITH PAYU"),
+                withParent(
+                    allOf(
+                        withId(R.id.checkout_button_wrapper),
+                        withParent(IsInstanceOf.instanceOf(android.view.ViewGroup::class.java))
+                    )
+                ),
+                isDisplayed()
+            )
+        )
+        button3.check(matches(isDisplayed()))
+    }
+
+
+    @Test
+    fun checkoutCheckDropdownText() {
+        val tabView = onView(
+            allOf(
+                withContentDescription("Category"),
+                childAtPosition(
+                    childAtPosition(
+                        withId(R.id.pager_tabs),
+                        0
+                    ),
+                    2
+                ),
+                isDisplayed()
+            )
+        )
+        tabView.perform(ViewActions.click())
+
+        val tabView2 = onView(
+            allOf(
+                withContentDescription("Add product"),
+                childAtPosition(
+                    childAtPosition(
+                        withId(R.id.pager_tabs),
+                        0
+                    ),
+                    3
+                ),
+                isDisplayed()
+            )
+        )
+        tabView2.perform(ViewActions.click())
+
+
+        val textView = onView(
+            allOf(
+                withText("Add product"),
+                withParent(
+                    allOf(
+                        withId(R.id.add_product_heading),
+                        (IsInstanceOf.instanceOf(android.view.ViewGroup::class.java))
+                    )
+                ),
+                isDisplayed()
+            )
+        )
+        textView.check(matches(withText("Add product")))
+
+        val textView2 = onView(
+            allOf(
+                withText("Name"),
+                withParent(
+                    allOf(
+                        withId(R.id.add_product_product_name),
+                        withParent(IsInstanceOf.instanceOf(android.view.ViewGroup::class.java))
+                    )
+                ),
+                isDisplayed()
+            )
+        )
+        textView2.check(matches(withText("Name")))
+
+        val textView3 = onView(
+            allOf(
+                withText("Description"),
+                withParent(
+                    allOf(
+                        withId(R.id.add_product_product_description),
+                        withParent(IsInstanceOf.instanceOf(android.view.ViewGroup::class.java))
+                    )
+                ),
+                isDisplayed()
+            )
+        )
+        textView3.check(matches(withText("Description")))
+
+        val textView4 = onView(
+            allOf(
+                withText("Price"),
+                withParent(
+                    allOf(
+                        withId(R.id.add_product_product_price),
+                        withParent(IsInstanceOf.instanceOf(android.view.ViewGroup::class.java))
+                    )
+                ),
+                isDisplayed()
+            )
+        )
+        textView4.check(matches(withText("Price")))
+
+        val textView5 = onView(
+            allOf(
+                withText("Category"),
+                withParent(
+                    allOf(
+                        withId(R.id.add_product_category_selector),
+                        withParent(IsInstanceOf.instanceOf(android.view.ViewGroup::class.java))
+                    )
+                ),
+                isDisplayed()
+            )
+        )
+        textView5.check(matches(withText("Category")))
+
+        val textView6 = onView(
+            allOf(
+                withId(R.id.category_dropdown_item), withText("Alcoholic drinks"),
+                withParent(
+                    allOf(
+                        withId(R.id.category_spinner),
+                        withParent(withId(R.id.add_product_category_selector))
+                    )
+                ),
+                isDisplayed()
+            )
+        )
+        textView6.check(matches(withText("Alcoholic drinks")))
+
+        val textView7 = onView(
+            allOf(
+                withId(R.id.category_dropdown_item), withText("Alcoholic drinks"),
+                withParent(
+                    allOf(
+                        withId(R.id.category_spinner),
+                        withParent(withId(R.id.add_product_category_selector))
+                    )
+                ),
+                isDisplayed()
+            )
+        )
+        textView7.check(matches(withText("Alcoholic drinks")))
     }
 
     private fun childAtPosition(
