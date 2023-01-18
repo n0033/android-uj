@@ -13,10 +13,7 @@ import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.FirebaseAuthUIActivityResultContract
 import com.firebase.ui.auth.data.model.FirebaseAuthUIAuthenticationResult
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.Logger
 import com.stripe.android.PaymentConfiguration
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.runBlocking
 import pl.nw.zadanie_06.common.local_db.LocalDatabase
 import pl.nw.zadanie_06.databinding.ActivityMainBinding
@@ -30,7 +27,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var db: LocalDatabase
     private lateinit var auth: FirebaseAuth
     private lateinit var stripe: Unit
-    private val DEBUG_LOGOUT = true
+    private val DEBUG_LOGOUT = false
+    private val DEBUG_AUTO_SIGNIN = true
 
     private val signInLauncher = registerForActivityResult(
         FirebaseAuthUIActivityResultContract()
@@ -48,7 +46,6 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         db = LocalDatabase.getInstance(applicationContext)
         auth = FirebaseAuth.getInstance()
-        println(auth)
         stripe = PaymentConfiguration.init(applicationContext, Constants.STRIPE_PUBLISHABLE_KEY)
 
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -57,12 +54,18 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(binding.toolbar)
         supportActionBar?.hide()
 
-        if (DEBUG_LOGOUT) {
-            AuthUI.getInstance().signOut(this)
+        if (!DEBUG_AUTO_SIGNIN) {
+            if (DEBUG_LOGOUT) {
+                AuthUI.getInstance().signOut(this)
+            }
+
+            if (auth.currentUser == null || DEBUG_LOGOUT) {
+                signInLauncher.launch(createSignInIntent())
+            }
         }
 
-        if (auth.currentUser == null) {
-            signInLauncher.launch(createSignInIntent())
+        if (DEBUG_AUTO_SIGNIN) {
+            FirebaseAuth.getInstance().signInWithEmailAndPassword(Constants.TEST_USER_LOGIN, Constants.TEST_USER_PASSWORD)
         }
 
 

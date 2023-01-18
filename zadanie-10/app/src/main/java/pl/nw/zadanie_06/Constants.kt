@@ -8,6 +8,8 @@ object Constants {
         "category" to "categories",
         "product" to "products",
     )
+    val TEST_USER_LOGIN = "asdf@asdf.com"
+    val TEST_USER_PASSWORD = "test123"
     val DATABASE_URI = System.getenv("DATABASE_URI")
         ?: "https://android-06-f6858-default-rtdb.europe-west1.firebasedatabase.app"
     val REALTIME_DB = FirebaseDatabase.getInstance(DATABASE_URI).reference

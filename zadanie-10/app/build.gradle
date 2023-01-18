@@ -75,6 +75,7 @@ dependencies {
 
     // room
     implementation("androidx.room:room-runtime:$room_version")
+    androidTestImplementation 'androidx.test.espresso:espresso-contrib:3.5.1'
     annotationProcessor("androidx.room:room-compiler:$room_version")
     kapt("androidx.room:room-compiler:$room_version")
     implementation("androidx.room:room-ktx:$room_version")
@@ -87,10 +88,10 @@ dependencies {
 
     androidTestImplementation "androidx.test:core:$androidx_test_core_version"
     androidTestImplementation "androidx.test:core-ktx:$androidx_test_core_version"
-    androidTestImplementation "androidx.test.ext:junit:$androidx_test_junit_version"
+    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation "androidx.test:runner:$androidx_test_runner_version"
-    androidTestImplementation "androidx.test:rules:$androidx_test_rules_version"
-    androidTestImplementation "androidx.test.espresso:espresso-core:$espresso_version"
+    androidTestImplementation "androidx.test:rules:1.5.0"
+    androidTestImplementation "androidx.test.espresso:espresso-core:3.5.1"
     androidTestImplementation "androidx.test.espresso:espresso-intents:$espresso_version"
     androidTestImplementation "org.mockito:mockito-core:$mockito_version"
     androidTestImplementation "org.mockito.kotlin:mockito-kotlin:$mockito_kotlin_version"
@@ -102,7 +103,7 @@ dependencies {
 
     testImplementation "androidx.test:core:$androidx_test_core_version"
     testImplementation "androidx.test:core-ktx:$androidx_test_core_version"
-    testImplementation "androidx.test.ext:junit:$androidx_test_junit_version"
+    testImplementation "androidx.test.ext:junit:1.1.5"
     testImplementation "androidx.test:runner:$androidx_test_runner_version"
-    testImplementation "androidx.test:rules:$androidx_test_rules_version"
+    testImplementation "androidx.test:rules:1.5.0"
 }
