@@ -1,13 +1,11 @@
-**Zad 9 Płatności**
+**Zad 10 Testy**
 
-✅ 3.0 formularz płatności oraz mockowanie przez aplikację serwerową
+✅3.0 stworzyć 50 testów funkcjonalnych 
 
-✅ 3.5 model płatności lokalnie
+✅3.5 stworzyć dodatkowo 20 testów jednostkowych
 
-✅ 4.0 lista zakupionych (opłaconych) produktów + model
+✅4.0 stworzyć mocki modeli produktów oraz kategorii
 
-✅ 4.5 wdrożenie stripe'a
+✅4.5 dodać fixturki
 
-✅ 5.0 dodanie opcji przez PayU
-
-Termin: **06.01** 
+5.0 uruchomić testy na browserstack na minimum 2 urządzeniach
