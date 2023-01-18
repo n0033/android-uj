@@ -1,0 +1,49 @@
+{
+    "id": "cbabdf95b8be975835393df9f6ea9fef3035a161",
+    "framework": "espresso",
+    "duration": null,
+    "status": "running",
+    "input_capabilities":
+    {
+        "devices":
+        [
+            "Samsung Galaxy S9 Plus-9.0"
+        ],
+        "app": "bs://a62d0ff8f7208b9b82a89069c48e5a590259d14e",
+        "testSuite": "bs://44c3fac3720452cb1c10a680520735908fece1e4",
+        "project": "Untitled Espresso Project"
+    },
+    "start_time": "2023-01-18 22:11:32 UTC",
+    "app_details":
+    {
+        "url": "bs://a62d0ff8f7208b9b82a89069c48e5a590259d14e",
+        "bundle_id": "pl.nw.zadanie_06",
+        "version": "1.0",
+        "name": "shop1.apk"
+    },
+    "test_suite_details":
+    {
+        "url": "bs://44c3fac3720452cb1c10a680520735908fece1e4",
+        "bundle_id": "pl.nw.zadanie_06.test",
+        "version": "",
+        "name": "shop-test.apk"
+    },
+    "devices":
+    [
+        {
+            "device": "Samsung Galaxy S9 Plus",
+            "os": "android",
+            "os_version": "9.0",
+            "sharding": false,
+            "sessions":
+            [
+                {
+                    "id": "50da895d44e7cd3925881be04d921bfe4d944503",
+                    "status": "running",
+                    "start_time": null,
+                    "duration": null
+                }
+            ]
+        }
+    ]
+}

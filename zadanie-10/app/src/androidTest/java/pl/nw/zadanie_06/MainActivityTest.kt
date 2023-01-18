@@ -47,13 +47,11 @@ class MainActivityTest {
     fun ensureAuthenticated() {
         val context = ApplicationProvider.getApplicationContext<Context>()
         db = LocalDatabase.getInstance(context)
-        runBlocking {
-            if (FirebaseAuth.getInstance().currentUser == null) {
-                FirebaseAuth.getInstance().signInWithEmailAndPassword(
-                    TestConstants.TEST_USER_LOGIN, TestConstants.TEST_USER_PASSWORD
-                )
-            }
-        }
+//        if (FirebaseAuth.getInstance().currentUser == null) {
+//            FirebaseAuth.getInstance().signInWithEmailAndPassword(
+//                TestConstants.TEST_USER_LOGIN, TestConstants.TEST_USER_PASSWORD
+//            )
+//        }
     }
 
     @After
@@ -687,6 +685,7 @@ class MainActivityTest {
         )
         textView.check(matches(isDisplayed()))
     }
+
     @Test
     fun goToCheckoutView() {
         val tabView = onView(
@@ -817,8 +816,6 @@ class MainActivityTest {
         )
         textView.check(matches(isDisplayed()))
     }
-
-
 
 
     @Test
