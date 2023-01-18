@@ -8,4 +8,4 @@
 
 ✅4.5 dodać fixturki
 
-5.0 uruchomić testy na browserstack na minimum 2 urządzeniach
+✅5.0 uruchomić testy na browserstack na minimum 2 urządzeniach (`browserstack-s9.json` and `browserstack-p30.json` files)
