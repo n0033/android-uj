@@ -1,13 +1,17 @@
-**Zad 9 Płatności**
 
-✅ 3.0 formularz płatności oraz mockowanie przez aplikację serwerową
 
-✅ 3.5 model płatności lokalnie
+**Zad 11 Notyfikacje**
 
-✅ 4.0 lista zakupionych (opłaconych) produktów + model
+✅3.0 Wyświetl notyfikacje w telefonie o nowych produktach
 
-✅ 4.5 wdrożenie stripe'a
+✅3.5 Wyświetl istotną notyfikację o promocji do końca tygodnia
+  - after application launch
 
-✅ 5.0 dodanie opcji przez PayU
+✅4.0 utwórz badge dla notyfikacji aplikacji
+  - click and hold app icon
 
-Termin: **06.01** 
+✅4.5 rozszerz notyfikacje o możliwość wymiany informacji (chat)
+  - in product add notification
+
+✅5.0 dodaj wywyłanie wiadomości do serwera oraz wyświetl odpowiedzi w formie notyfikacji
+  - after writing a message in product add notification
