@@ -2,12 +2,15 @@ package pl.nw.zadanie_06
 
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
@@ -70,6 +73,8 @@ class MainActivity : AppCompatActivity() {
             }
         }
         createNotificationChannel()
+        createNotificationChannelImportanceHigh()
+        createNotificationHighSeverity()
         val navController = findNavController(R.id.nav_host_fragment_content_main)
         appBarConfiguration = AppBarConfiguration(navController.graph)
         setupActionBarWithNavController(navController, appBarConfiguration)
@@ -120,5 +125,38 @@ class MainActivity : AppCompatActivity() {
         val notificationManager: NotificationManager =
             getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         notificationManager.createNotificationChannel(channel)
+    }
+
+    private fun createNotificationChannelImportanceHigh() {
+        val name = getString(R.string.discount_notification_name)
+        val descriptionText = getString(R.string.discount_notification_description)
+        val importance = NotificationManager.IMPORTANCE_HIGH
+        val channel = NotificationChannel("channel_2", name, importance).apply {
+            description = descriptionText
+        }
+        val notificationManager: NotificationManager =
+            getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        notificationManager.createNotificationChannel(channel)
+    }
+
+
+    private fun createNotificationHighSeverity() {
+        val intent = Intent(applicationContext, MainActivity::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        }
+        val pendingIntent: PendingIntent =
+            PendingIntent.getActivity(applicationContext, 0, intent, PendingIntent.FLAG_IMMUTABLE)
+
+        val builder = NotificationCompat.Builder(applicationContext, "channel_1")
+            .setSmallIcon(R.drawable.drink)
+            .setContentTitle("SALE SALE SALE SALE")
+            .setContentText("SUPER DISCOUNTS ON COLA")
+            .setPriority(NotificationCompat.PRIORITY_HIGH)
+            .setBadgeIconType(NotificationCompat.BADGE_ICON_LARGE)
+            .setNumber(1)
+            .setContentIntent(pendingIntent)
+        with(NotificationManagerCompat.from(applicationContext)) {
+            notify(2, builder.build())
+        }
     }
 }

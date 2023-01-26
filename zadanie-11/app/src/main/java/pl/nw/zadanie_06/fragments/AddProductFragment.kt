@@ -10,6 +10,7 @@ import android.widget.ArrayAdapter
 import android.widget.Spinner
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import androidx.core.app.RemoteInput
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -22,6 +23,7 @@ import pl.nw.zadanie_06.databinding.AddProductBinding
 import pl.nw.zadanie_06.models.data.Category
 import pl.nw.zadanie_06.models.data.Product
 import pl.nw.zadanie_06.models.view.CategoryListViewModel
+import pl.nw.zadanie_06.services.NotificationReceiver
 import pl.nw.zadanie_06.utils.UserUtils
 
 class AddProductFragment : Fragment(R.layout.add_product) {
@@ -85,19 +87,45 @@ class AddProductFragment : Fragment(R.layout.add_product) {
         val intent = Intent(requireContext(), MainActivity::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         }
+        // Key for the string that's delivered in the action's intent.
+        val KEY_TEXT_REPLY = "key_text_reply"
+        val replyLabel: String = resources.getString(R.string.notification_reply_button)
+        var remoteInput: RemoteInput = RemoteInput.Builder(KEY_TEXT_REPLY).run {
+            setLabel(replyLabel)
+            build()
+        }
+        val resultIntent = Intent(context, NotificationReceiver::class.java)
+        var replyPendingIntent: PendingIntent =
+            PendingIntent.getBroadcast(
+                requireContext(),
+                1,
+                resultIntent,
+                PendingIntent.FLAG_MUTABLE
+            )
+
+        var action: NotificationCompat.Action =
+            NotificationCompat.Action.Builder(
+                R.drawable.icons8_left_2_50,
+                getString(R.string.notification_reply_button), replyPendingIntent
+            )
+                .addRemoteInput(remoteInput)
+                .build()
         val pendingIntent: PendingIntent =
             PendingIntent.getActivity(requireContext(), 0, intent, PendingIntent.FLAG_IMMUTABLE)
 
         val builder = NotificationCompat.Builder(requireContext(), "channel_1")
-            .setSmallIcon(R.mipmap.ic_launcher)
             .setContentTitle("New product")
             .setContentText("Spend your money please")
-            .setPriority(NotificationCompat.PRIORITY_HIGH)
+            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+            .setSmallIcon(androidx.appcompat.R.drawable.abc_btn_colored_material)
+            .setBadgeIconType(NotificationCompat.BADGE_ICON_SMALL)
             .setContentIntent(pendingIntent)
+            .addAction(action)
         with(NotificationManagerCompat.from(requireContext())) {
             notify(1, builder.build())
         }
     }
+
 
     override fun onDestroyView() {
         super.onDestroyView()

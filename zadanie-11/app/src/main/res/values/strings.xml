@@ -19,6 +19,9 @@
     <string name="next">Next</string>
     <string name="new_products_notification_name">New product</string>
     <string name="new_products_notification_description">New product has been added to zad-06 app</string>
+    <string name="discount_notification_name">Low prices!</string>
+    <string name="discount_notification_description">Very very very low prices here</string>
+    <string name="notification_reply_button">Reply</string>
     <string name="orders">Orders</string>
     <string name="pager_label">Pager fragment</string>
     <string name="paid_products">Paid products</string>

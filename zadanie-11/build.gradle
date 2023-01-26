@@ -15,4 +15,5 @@ ext {
     junit_version = "4.13.2"
     room_version = "2.4.3"
     gson_version = "2.9.0"
+    ktor_version = "2.2.2"
 }

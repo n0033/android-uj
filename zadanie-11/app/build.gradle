@@ -38,6 +38,10 @@ android {
     buildFeatures {
         viewBinding true
     }
+    packagingOptions {
+        exclude 'META-INF/INDEX.LIST'
+        exclude 'META-INF/io.netty.versions.properties'
+    }
 }
 
 dependencies {
@@ -64,8 +68,16 @@ dependencies {
     implementation 'com.github.kittinunf.fuel:fuel-gson:2.3.1'
 
 
+    //ktor
+    implementation("io.ktor:ktor-client-core:$ktor_version")
+    implementation("io.ktor:ktor-client-cio:$ktor_version")
+    implementation("io.ktor:ktor-client-logging:$ktor_version")
+
+
+
     // gson
     implementation "com.google.code.gson:gson:$gson_version"
+
 
     // junit
     implementation "junit:junit:$junit_version"
