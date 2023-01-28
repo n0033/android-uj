@@ -47,11 +47,11 @@ class MainActivityTest {
     fun ensureAuthenticated() {
         val context = ApplicationProvider.getApplicationContext<Context>()
         db = LocalDatabase.getInstance(context)
-//        if (FirebaseAuth.getInstance().currentUser == null) {
-//            FirebaseAuth.getInstance().signInWithEmailAndPassword(
-//                TestConstants.TEST_USER_LOGIN, TestConstants.TEST_USER_PASSWORD
-//            )
-//        }
+        if (FirebaseAuth.getInstance().currentUser == null) {
+            FirebaseAuth.getInstance().signInWithEmailAndPassword(
+                TestConstants.TEST_USER_LOGIN, TestConstants.TEST_USER_PASSWORD
+            )
+        }
     }
 
     @After
